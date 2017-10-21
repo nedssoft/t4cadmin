@@ -14,6 +14,8 @@ class CreatePlayerBadgesTable extends Migration
     public function up()
     {
         Schema::create('player_badges', function (Blueprint $table) {
+            $table->integer('player'); //player id
+            $table->integer('badge'); //badge id
             $table->increments('id');
             $table->timestamps();
         });
