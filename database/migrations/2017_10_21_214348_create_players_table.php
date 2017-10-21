@@ -15,6 +15,7 @@ class CreatePlayersTable extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->string('name')->nullable();
+            $table->string('phone')->nullable();
             $table->string('username');
             $table->string('email')->unique();
             $table->string('password');
