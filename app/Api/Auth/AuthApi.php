@@ -1,6 +1,6 @@
 <?php
 
-namespace Factory\Api;
+namespace T4C\Api;
 
 use Factory\Api\Api;
 use App\Api\Auth\AuthProvider;
@@ -11,7 +11,7 @@ use App\Api\Auth\AuthProvider;
 | The AuthApi
 |-------------------------------------------
 | This registers the AuthProvider into the IOC
-| Remember is always extends the API class from Factory\Api\Api
+| Remember it always extends the API class from Factory\Api\Api
 |
 */
 class AuthApi extends Api{
