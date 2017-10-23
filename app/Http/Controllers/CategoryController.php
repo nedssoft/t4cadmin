@@ -10,20 +10,28 @@ use Session;
  
 use App\Category;
 
+use App\User;
+
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * 
      */
+    public function __construct(){
+        //$this->middleware('auth');
+    }
+    
+    
     public function index()
     {
         //10 items/page
-        $itemsPerPage = 10;
-        $news = Category::orderBy('created_at', 'desc')->paginate($itemsPerPage);
+        $itemsPerPage = 15;
+        $cat = Category::orderBy('created_at', 'desc')->paginate($itemsPerPage);
         
-        return view('category.index', array('category' => $news, 'title' => 'Categories'));
+        return view('category.index', array('category' => $cat, 'title' => 'Categories'));
     }
 
     /**
@@ -49,7 +57,7 @@ class CategoryController extends Controller
                 $this->validate($request, array(
                                 'name' => 'required',
                                 'description' => 'required',
-                                'imgUrl' => '', //not sure of  myself here
+                                'imgUrl' => 'required'
                             )
                         );
         
@@ -66,11 +74,11 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $cid
      * @return \Illuminate\Http\Response
      */
     
-    public function show($id)
+    public function show($cid)
     {
         //nothing needed here for now
     }
@@ -78,12 +86,12 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $cid
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($cid)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::findOrFail($cid);
         return view('category.edit', array('category' => $category, 'title' => 'Edit Category'));
     }
 
@@ -91,17 +99,17 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $cid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $cid)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::findOrFail($cid);
  
         $this->validate($request, array(
                                 'name' => 'required',
                                 'description' => 'required',
-                                'imgUrl' => '',
+                                'imgUrl' => 'required',
                             )
                         );
  
@@ -111,18 +119,18 @@ class CategoryController extends Controller
  
         Session::flash('flash_message', 'Category updated successfully!');
  
-        return redirect()->back();
+        return redirect()->route('category.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $cid
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($cid)
     {
-        $category = News::findOrFail($id);
+        $category = Category::findOrFail($cid);
  
         $category->delete();
  
