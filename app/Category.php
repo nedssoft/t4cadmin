@@ -10,4 +10,9 @@ class Category extends Model
     public $primaryKey = 'cid';
     public $fillable = array('name', 'description', 'imgUrl');
     
+
+    public function questions()
+    {
+    	return $this->hasMany(Questions::class);
+    }
 }

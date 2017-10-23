@@ -16,4 +16,9 @@ class Levels extends Model
     protected $fillable = [
         'name', 'icon','description'
     ];
+
+    public function questions()
+    {
+    	return $this->hasMany(Questions::class);
+    }
 }

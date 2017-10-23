@@ -8,6 +8,6 @@ $factory->define(App\Category::class, function (Faker $faker) {
     return [
         'name'=>$faker->randomElement($cat),
         'description'=>$faker->sentence,
-        'imgUrl'=>$faker->url,
+        'imgUrl'=>$faker->imageUrl,
     ];
 });
