@@ -16,3 +16,69 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+  Route::group(['prefix' => 'v1'], function() {
+
+/*
+  |--------------------------------------------------------------------------
+  | Auth API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+
+    Route::get('/auth/index', 'AuthController@index1');
+    // Route::post('/login', 'AuthController@login');
+    // Route::post('/signup', 'AuthController@signup');
+   
+/*
+  |--------------------------------------------------------------------------
+  | Player API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+
+//   Route::get('/index', 'PlayerController@index');
+
+  //get all player details
+//   Route::get('/{player}', 'PlayerController@player');  
+  
+  //get all player level
+//   Route::update('/{player}', 'PlayerController@player');
+
+
+
+ /*
+  |--------------------------------------------------------------------------
+  | Questions API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Categories API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+
+
+ /*
+  |--------------------------------------------------------------------------
+  | Badges API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+
+//   Route::get('/index', 'BadgesController@index');
+//   Route::get('/create', 'BadgesController@create');
+//   Route::get('/signup', 'BadgesController@signup');
+
+ /*
+  |--------------------------------------------------------------------------
+  | Levels API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+  });
