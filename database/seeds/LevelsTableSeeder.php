@@ -12,6 +12,6 @@ class LevelsTableSeeder extends Seeder
     public function run()
     {
         //
-        factory(App\Level::class, 5)->create();
+        factory(App\Levels::class, 5)->create();//creates 5 records
     }
 }

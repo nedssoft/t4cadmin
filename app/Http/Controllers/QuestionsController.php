@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Level;
-use App\Option;
+use App\Levels;
 use App\Category;
 use App\Question;
 
@@ -23,8 +22,8 @@ class QuestionsController extends Controller
       foreach ($questions as $question) {
 
         
-        $categories[] = Category::find($question->category_id)->category;
-        $levels[] =   Level::find($question->level_id)->level;
+        $categories[] = Category::find($question->category_id);
+        $levels[] =   Levels::find($question->level_id);
           
       }
 

@@ -4,8 +4,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Question::class, function (Faker $faker) {
 
-	 $cat_id = App\Category::pluck('id')->toArray();
-	 $level_id = App\Level::pluck('id')->toArray();
+	 $cat_id = App\Category::pluck('cid')->toArray();
+	 $level_id = App\Levels::pluck('id')->toArray();
     return [
         //
         'category_id'=>$faker->randomElement($cat_id),
