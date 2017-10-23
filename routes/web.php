@@ -30,3 +30,5 @@ Route::any('categories/update/{id}', array('as' => 'category.update', 'uses' => 
 Route::any('categories/delete/{id}', array('as' => 'category.destroy', 'uses' => 'CategoryController@destroy'));
 //-------------------------------------------------------------//
 
+// Player Routes
+Route::get('player/create', array('as' => 'player.create', 'uses' => 'PlayerController@signup'));
