@@ -115,4 +115,26 @@ class PlayerController extends Controller
               }
 
         }
+
+        public function player($id){
+                      
+            $player = Players::where('id','=',$id)->first();
+          
+            if(count($player) < 1){
+                return response()->json([
+                    'status'=>'error',
+                    'code'=>404,
+                    'message'=>'Player Not Found.',
+                    'data'=> null
+                ]);
+            }else{
+                return response()->json([
+                    'status'=>'success',
+                    'code'=>200,
+                    'message'=>'Player Found',
+                    'data'=> $player
+                ]);
+            }
+
+        }
 }
