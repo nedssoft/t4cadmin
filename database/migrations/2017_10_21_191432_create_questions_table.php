@@ -14,11 +14,10 @@ class CreateQuestionsTable extends Migration
     public function up()
     {
         Schema::create('questions', function (Blueprint $table) {
+
             $table->increments('id');
-            $table->integer('category_id');
-            $table->foreign('category_id')->references('cid')->on('categories')->onDelete('cascade');
-            $table->integer('level_id');
-            $table->foreign('level_id')->references('id')->on('levels')->onDelete('cascade');
+            $table->integer('category_id')->unsigned();            
+            $table->integer('level_id')->unsigned();            
             $table->text('question');
             $table->string('option_1');
             $table->string('option_2');
@@ -26,10 +25,22 @@ class CreateQuestionsTable extends Migration
             $table->string('option_4');
             $table->string('answer');
             $table->timestamps();
+            
         });
-    }
 
-    /**
+
+    Schema::table('questions', function($table) {      
+        $table->foreign('category_id')->references('cid')->on('categories');
+    });
+
+    Schema::table('questions', function($table) {      
+        $table->foreign('level_id')->references('id')->on('levels');
+    });
+
+}
+
+
+      /**
      * Reverse the migrations.
      *
      * @return void

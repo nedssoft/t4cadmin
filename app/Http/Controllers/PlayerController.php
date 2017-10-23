@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 use App\Players;
@@ -19,16 +18,13 @@ class PlayerController extends Controller
 	 * @return JSON response success | error
 	 */
   public static function signup(Array $data)
-  {	 
-	  	$name = filter_var($data['first_name'], FILTER_SANITIZE_STRING);
+  {	 	  	
 	  	$lname = filter_var($data['name'], FILTER_SANITIZE_STRING);		
-		$username = filter_var($data['email'], FILTER_SANITIZE_STRING);
+		$username = filter_var($data['username'], FILTER_SANITIZE_STRING);	
 	  	$email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
 	  	$phone = filter_var($data['phone'], FILTER_SANITIZE_EMAIL);
         $password = Hash::make($data['password']);
         
-	//check that email is valid
-		if (static::checkEmail($email) == $email) {	
 
             if(Player::find('email',$email)->get()){
 
@@ -68,8 +64,7 @@ class PlayerController extends Controller
 
                 }
             }	
-			
-		} 
+
     }
     
     public static function login(Array $data)
