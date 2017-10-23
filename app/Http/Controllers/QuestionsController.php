@@ -52,6 +52,11 @@ class QuestionsController extends Controller
     public function create()
     {
         //
+
+        $categories = Category::all();
+        $levels = Levels::all();
+
+        return view('question.add-question', compact('categories', 'levels'));
     }
 
     /**
@@ -63,6 +68,28 @@ class QuestionsController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request, [
+            'level_id'=>'required', 
+            'category_id'=>'required', 
+            'question'=>'required',
+            'option_1'=>'required',
+            'option_2'=>'required',
+            'option_3'=>'required',
+            'option_4'=>'required',
+            'answer'=>'required'
+        ]);
+
+        $question = Questions::create($request->all());
+        if ($question->save()){
+            return response()->json(['status'=>'success', 'code'=>201, 
+                'message'=>'question added successfully']);
+        }
+
+        else{
+            return response()->json(['status'=>'failed', 'code'=>207, 'message'=>'unknown error'
+
+            ]);
+        }
     }
 
     /**
