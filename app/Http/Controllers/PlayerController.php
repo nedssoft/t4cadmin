@@ -17,16 +17,18 @@ class PlayerController extends Controller
 	 * @param Array of Player details
 	 * @return JSON response success | error
 	 */
-  public static function signup(Array $data)
-  {	 	  	
-	  	$lname = filter_var($data['name'], FILTER_SANITIZE_STRING);		
+  public static function signup(Request $request)
+  {	  
+        $data = $request->all();
+
+	  	$name = filter_var($data['name'], FILTER_SANITIZE_STRING);		
 		$username = filter_var($data['username'], FILTER_SANITIZE_STRING);	
 	  	$email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
 	  	$phone = filter_var($data['phone'], FILTER_SANITIZE_EMAIL);
         $password = Hash::make($data['password']);
         
 
-            if(Player::find('email',$email)->get()){
+            if(count(Players::where('email','=',$email)->first()) > 0){
 
                 return response()->json([
                     'status'=>'error',
@@ -37,7 +39,7 @@ class PlayerController extends Controller
 
             }else{
 
-                $player = new Player;
+                $player = new Players;	
                 $player->name = $name;
 				$player->username = $username;
 				$player->password = $password;
@@ -67,37 +69,39 @@ class PlayerController extends Controller
 
     }
     
-    public static function login(Array $data)
+    public static function login(Request $request)
     {
-              $username = filter_var($data['username'], FILTER_SANITIZE_STRING);
-              $password = Hash::make($data['password']);
+            $data = $request->all();          
 
+            $username = filter_var($data['username'], FILTER_SANITIZE_STRING);
+            $password = $data['password'];
+           
                 //allow signin with username or email and password
-              $player = Player::where('username', $username)->orWhere('email', $username)->get();
+
+              $player = Players::where('username','=', $username)->orWhere('email','=', $username)->first();
             
               //check if user exists
-              if ($player) { 
+              if (count($player)>0) { 
                 //compare pasword
-                  if($password == $player->password){
+                if (Hash::check($password, $player->password)) {                
+                        
+                        return response()->json([
+                            'status'=>'success',
+                            'code'=>200,
+                            'message'=>'Player Logged',
+                            'data'=> $player
+                        ]);
 
-                    return response()->json([
-                        'status'=>'success',
-                        'code'=>200,
-                        'message'=>'Player Logged',
-                        'data'=> $player
-                    ]);
-
-                  }else{
-
+                    }else{
+                        
                     return response()->json([
                         'status'=>'error',
-                        'code'=>200,
+                        'code'=>400,
                         'message'=>'Username or Password Incorrect',
                         'data'=> null
                     ]);
 
-                  }
-                
+                    }
   
               } else{
 
@@ -109,6 +113,28 @@ class PlayerController extends Controller
                 ]);
 
               }
-    }
 
+        }
+
+        public function player($id){
+                      
+            $player = Players::where('id','=',$id)->first();
+          
+            if(count($player) < 1){
+                return response()->json([
+                    'status'=>'error',
+                    'code'=>404,
+                    'message'=>'Player Not Found.',
+                    'data'=> null
+                ]);
+            }else{
+                return response()->json([
+                    'status'=>'success',
+                    'code'=>200,
+                    'message'=>'Player Found',
+                    'data'=> $player
+                ]);
+            }
+
+        }
 }

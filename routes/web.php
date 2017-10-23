@@ -28,7 +28,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /*
 |--------------------------------------------------------------------------------
-| Internal routes - Routes that should only be accessible when auth is satisfied
+| Category Routes
 |--------------------------------------------------------------------------------
 */
 
@@ -41,11 +41,20 @@ Route::get('/home', 'HomeController@index')->name('home');
     Route::any('categories/delete/{id}', array('as' => 'category.destroy', 'uses' => 'CategoryController@destroy'));
 
 
-//-------------------------------------------------------------//
 
-// Player Routes
+
+/*
+|--------------------------------------------------------------------------------
+| Player Routes
+|--------------------------------------------------------------------------------
+*/
 Route::post('player/create', array('as' => 'player.create', 'uses' => 'PlayerController@signup')); //create new player
 Route::post('player/login', array('as' => 'player.login', 'uses' => 'PlayerController@login')); //login a player
-//Route::get('player/{id}/points', array('as' => 'player.points', 'uses' => 'PlayerController@points')); //get player points
-//Route::get('player/{id}/badges', array('as' => 'player.badges', 'uses' => 'PlayerController@badges')); //get player badges
-//Route::get('player/{id}', array('as' => 'player.player', 'uses' => 'PlayerController@badges')); //get player full details
+Route::get('player/{id}', array('as' => 'player.player', 'uses' => 'PlayerController@player')); //get player full details
+
+
+/*
+|--------------------------------------------------------------------------------
+| Player Routes
+|--------------------------------------------------------------------------------
+*/
