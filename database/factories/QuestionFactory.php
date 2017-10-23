@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Question::class, function (Faker $faker) {
+$factory->define(App\Questions::class, function (Faker $faker) {
 
 	 $cat_id = App\Category::pluck('cid')->toArray();
 	 $level_id = App\Levels::pluck('id')->toArray();

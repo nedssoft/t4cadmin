@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Levels;
 use App\Category;
-use App\Question;
+use App\Questions;
 
 class QuestionsController extends Controller
 {
@@ -16,8 +16,9 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        //
-      $questions = Question::all();
+
+
+      $questions = Questions::all();
 
       foreach ($questions as $question) {
 
@@ -26,12 +27,20 @@ class QuestionsController extends Controller
         $levels[] =   Levels::find($question->level_id);
           
       }
+        if(empty($questions) || empty($categories) || empty($levels))
+        {
+            return response()->json([
+             'status'=>'error',
+             'code'=>'404',
+             'message'=>'Resource Not Found',
+             'data'=>null
+            ]);
+        }
 
-     // $collection = ['questions'=>$questions, 'categories'=>$categories, 'levels'=>$levels];
-
-      //dd($collection);
-
-      return response()->json(['questions'=>$questions, 'categories'=>$categories,'levels' =>$levels]);
+      return response()->json( ['status'=>'success',
+         'code'=>200,
+        'data'=>['questions'=>$questions, 
+        'categories'=>$categories,'levels' =>$levels]]);
   
     }
 
@@ -65,6 +74,9 @@ class QuestionsController extends Controller
     public function show($id)
     {
         //
+        $q = Questions::findOrFail($id);
+        $q->load('categories', 'levels');
+        dd($q);
     }
 
     /**
