@@ -74,35 +74,34 @@ class PlayerController extends Controller
             $data = $request->all();          
 
             $username = filter_var($data['username'], FILTER_SANITIZE_STRING);
-            $password = Hash::make($data['password']);
-
+            $password = $data['password'];
+           
                 //allow signin with username or email and password
 
-              $player = Players::where('username', $username)->orWhere('email', $email)->get();
+              $player = Players::where('username','=', $username)->orWhere('email','=', $username)->first();
             
               //check if user exists
-              if ($player) { 
+              if (count($player)>0) { 
                 //compare pasword
-                  if($password == $player->password){
+                if (Hash::check($password, $player->password)) {                
+                        
+                        return response()->json([
+                            'status'=>'success',
+                            'code'=>200,
+                            'message'=>'Player Logged',
+                            'data'=> $player
+                        ]);
 
-                    return response()->json([
-                        'status'=>'success',
-                        'code'=>200,
-                        'message'=>'Player Logged',
-                        'data'=> $player
-                    ]);
-
-                  }else{
-
+                    }else{
+                        
                     return response()->json([
                         'status'=>'error',
-                        'code'=>200,
+                        'code'=>400,
                         'message'=>'Username or Password Incorrect',
                         'data'=> null
                     ]);
 
-                  }
-                
+                    }
   
               } else{
 
@@ -114,6 +113,6 @@ class PlayerController extends Controller
                 ]);
 
               }
-    }
 
+        }
 }
