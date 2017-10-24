@@ -3,9 +3,12 @@
 namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Passport\HasApiTokens;
 
 class Players extends Model
 {
+    use HasApiTokens, Notifiable;
+    
      /**
      * The attributes that are mass assignable.
      *
