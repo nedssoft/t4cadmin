@@ -123,7 +123,7 @@ class PlayerController extends Controller
                       
             $player = Players::find($id);
             
-            if(count($player) < 1){
+            if(count($player)){
                 return response()->json([
                     'status'=>'error',
                     'code'=>404,
@@ -140,4 +140,12 @@ class PlayerController extends Controller
             }
 
         }
+
+    public function delete($id){
+
+        $player = Players::find($id);
+
+        if($player)
+
+    }
 }

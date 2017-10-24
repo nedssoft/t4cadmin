@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Badges;
 
+Use App\Levels;
 
-
-class BadgeController extends Controller
+class LevelController extends Controller
 {
-    
     public function index(){
-        return view('badges.badges');
+        return view('level.level');
     }
 
     public function create(Request $request){
@@ -20,26 +18,26 @@ class BadgeController extends Controller
         
         $name = $data['name'];
         $icon = $data['icon'];
-        $points = $data['points'];
+        $description = $data['description'];
 
-        $badget = Badges::create([
+        $level = Levels::create([
             'name'=>$name,
             'icon'=>$icon,
-            'points'=>$points
+            'description'=>$description
         ]);
 
-        if($badget){
+        if($level){
             return response()->json([
                 'status'=>'success',
                 'code'=>201,
-                'message'=>'Badge was created',
-                'data'=> $badge
+                'message'=>'Level was created',
+                'data'=> $levels
             ]);
         }else{
             return response()->json([
                 'status'=>'error',
                 'code'=>504,
-                'message'=>'Something went wrong, badge was not created',
+                'message'=>'Something went wrong, level was not created',
                 'data'=> null
             ]);
         }
@@ -49,20 +47,20 @@ class BadgeController extends Controller
     public function update(Request $request){
         
         $data = $request->all();       
-        $badge = Badges::find($data['id']);
+        $level = Levels::find($data['id']);
 
-        if($badge){
+        if($level){
 
-            $badge->name = $data['name'];
-            $badge->icon = $data['icon'];
-            $badge->points = $data['points'];
+            $level->name = $data['name'];
+            $level->icon = $data['icon'];
+            $level->points = $data['description'];
             
-            if($badge->save()){
+            if($level->save()){
                 
                 return response()->json([
                     'status'=>'Success',
                     'code'=>201,
-                    'message'=>'Badge Updated',
+                    'message'=>'Level Updated',
                     'data'=> null
                 ]);
 
@@ -71,7 +69,7 @@ class BadgeController extends Controller
                 return response()->json([
                     'status'=>'error',
                     'code'=>500,
-                    'message'=>'Badge not updated, something went wrong',
+                    'message'=>'Level not updated, something went wrong',
                     'data'=> null
                 ]);
 
@@ -81,23 +79,23 @@ class BadgeController extends Controller
             return response()->json([
                 'status'=>'error',
                 'code'=>504,
-                'message'=>'Badge Not Found',
+                'message'=>'Level Not Found',
                 'data'=> null
             ]);
         }
 
     }
 
-    public function badge($id){
+    public function level($id){
 
-        $badge = Badges::find($id);
+        $level = Levels::find($id);
 
-        if($badge){
+        if($level){
 
             return response()->json([
                 'status'=>'success',
                 'code'=>200,
-                'message'=>'Badge Found',
+                'message'=>'Level Found',
                 'data'=> null
             ]);
 
@@ -115,17 +113,18 @@ class BadgeController extends Controller
     }
 
     public function delete($id){
-        $badge = Badges::find($id);
 
-        if($badge){
+        $level = Levels::find($id);
 
-            if($badge->delete()){
+        if($level){
+
+            if($level->delete()){
 
                 return response()->json([
                     'status'=>'success',
                     'code'=>200,
-                    'message'=>'Badge Deleted',
-                    'data'=> $badge
+                    'message'=>'Level Deleted',
+                    'data'=> $level
                 ]);
 
             }else{
@@ -133,8 +132,8 @@ class BadgeController extends Controller
                 return response()->json([
                     'status'=>'error',
                     'code'=>500,
-                    'message'=>'Something went wrong, badge was not deleted',
-                    'data'=> $badge
+                    'message'=>'Something went wrong, level was not deleted',
+                    'data'=> $level
                 ]);
 
             }
@@ -144,7 +143,7 @@ class BadgeController extends Controller
             return response()->json([
                 'status'=>'error',
                 'code'=>404,
-                'message'=>'Badge Not Found',
+                'message'=>'Level Not Found',
                 'data'=> null
             ]);
 
