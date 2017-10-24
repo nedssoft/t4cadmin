@@ -59,7 +59,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add Badge</h4>
+        <h4 class="modal-title">Add Level</h4>
       </div>
       <form action="badge/create" method="POST">
             {{ csrf_field() }}

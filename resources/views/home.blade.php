@@ -17,11 +17,11 @@
                     <div class="alert alert-default alert-dismissable fade in">
                     <p><strong>Menu</strong></p><br>
                     <a href="/categories" class="btn btn-default">Category</a>
-                    <a href="/contact" class="btn btn-default">Questions</a>
+                    <a href="/questions" class="btn btn-default">Questions</a>
                     <a href="/badge" class="btn btn-default">Badges</a>                   
-                    <a href="/help" target="_blank" class="btn btn-default">Levels</a>
-                    <a href="/help" target="_blank" class="btn btn-default">Points</a>
-                    <a href="/help" target="_blank" class="btn btn-default">Admin</a>
+                    <a href="/level" class="btn btn-default">Levels</a>
+                    {{--  <a href="/points" target="_blank" class="btn btn-default">Points</a>
+                    <a href="/app" target="_blank" class="btn btn-default">Admin</a>  --}}
                   </div>
                    
                 </div>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-use App\Http\Controllers\Badge;
+use App\Http\Controllers\PlayerBadge;
+use App\Http\Controllers\Levels;
+use App\Http\Controllers\Levels;
 
 use App\Players;
 
@@ -50,6 +52,10 @@ class PlayerController extends Controller
                 $player->phone = $phone;
                 
                 if($player->save()){
+
+                    //create user account in points
+                    //create user account in badges
+
 
                     return response()->json([
                         'status'=>'success',
