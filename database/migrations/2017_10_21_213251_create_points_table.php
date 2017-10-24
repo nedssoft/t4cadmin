@@ -14,7 +14,7 @@ class CreatePointsTable extends Migration
     public function up()
     {
         Schema::create('points', function (Blueprint $table) {
-            $table->integer('player'); //player id
+            $table->integer('player_id'); //player id
             $table->integer('value'); //point value
             $table->integer('amount'); //price value
             $table->increments('id');

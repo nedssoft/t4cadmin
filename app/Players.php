@@ -21,7 +21,7 @@ class Players extends Model
     //get player badges
 
     public function badges(){
-    	return $this->hasMany('App\Badges');
+    	return $this->hasMany('App\PlayerBadges');
     }
 
     //get player levels

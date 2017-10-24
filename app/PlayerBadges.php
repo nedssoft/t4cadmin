@@ -13,6 +13,8 @@ class PlayerBadges extends Model
      * @var array
      */
     protected $fillable = [
-        'player', 'badge'
+        'player_id', 'badge_id'
     ];
+
+    
 }

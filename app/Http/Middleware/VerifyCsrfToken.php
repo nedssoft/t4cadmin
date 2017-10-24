@@ -13,8 +13,9 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'player/create', //temporary exclude
-        'player/login',
-        'player/{id}',
-        'oauth/authorize'
+        'player/login',        
+        'oauth/authorize',
+        'badge/create',
+        'badge/update'
     ];
 }

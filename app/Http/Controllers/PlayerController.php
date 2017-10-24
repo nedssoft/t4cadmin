@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use App\Http\Controllers\Badge;
+
 use App\Players;
+
 
 class PlayerController extends Controller
 {
@@ -51,7 +54,7 @@ class PlayerController extends Controller
                     return response()->json([
                         'status'=>'success',
                         'code'=>201,
-                        'message'=>'player already exits',
+                        'message'=>'player created',
                         'data'=> $player
                     ]);
 
@@ -118,8 +121,8 @@ class PlayerController extends Controller
 
         public function player($id){
                       
-            $player = Players::where('id','=',$id)->first();
-          
+            $player = Players::find($id);
+            
             if(count($player) < 1){
                 return response()->json([
                     'status'=>'error',
