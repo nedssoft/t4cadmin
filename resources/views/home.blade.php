@@ -18,7 +18,7 @@
                     <p><strong>Menu</strong></p><br>
                     <a href="/categories" class="btn btn-default">Category</a>
                     <a href="/contact" class="btn btn-default">Questions</a>
-                    <a href="/account" class="btn btn-default">Badges</a>                   
+                    <a href="/badge" class="btn btn-default">Badges</a>                   
                     <a href="/help" target="_blank" class="btn btn-default">Levels</a>
                     <a href="/help" target="_blank" class="btn btn-default">Points</a>
                     <a href="/help" target="_blank" class="btn btn-default">Admin</a>

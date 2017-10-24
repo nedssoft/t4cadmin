@@ -60,5 +60,6 @@ Route::get('player/{id}', array('as' => 'player.player', 'uses' => 'PlayerContro
 */
 
 Route::post('badge/create', array('as' => 'badge.create', 'uses' => 'BadgeController@create'));
+Route::get('badge', array('as' => 'badge.index', 'uses' => 'BadgeController@index'));
 Route::get('badge/{id}', array('as' => 'badge.badge', 'uses' => 'BadgeController@badge'));
 Route::post('badge/update', array('as' => 'badge.update', 'uses' => 'BadgeController@update'));

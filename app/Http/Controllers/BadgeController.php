@@ -10,6 +10,10 @@ use App\Badges;
 class BadgeController extends Controller
 {
     
+    public function index(){
+        return view('badges.badges');
+    }
+
     public function create(Request $request){
         
         $data = $request->all();
