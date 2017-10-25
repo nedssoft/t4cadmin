@@ -18,16 +18,24 @@ class QuestionsController extends Controller
     {
 
 
-      $questions = Questions::all();
+      $data = array();
+      /**
+
+      *this part is to be used for returnig json response only 
+      */
+      $questions = Questions::where('status', 2)->get();
 
       foreach ($questions as $question) {
 
-        
-        $categories[] = Category::find($question->category_id);
-        $levels[] =   Levels::find($question->level_id);
-          
+         
+         $data['questions'][] =  $question;
+        $data['category'][]   =  $question->category()->get();
+         $data['level'][]     =  $question->level()->get();
+       
+         
       }
-        if(empty($questions) || empty($categories) || empty($levels))
+
+        if(empty($data) )
         {
             return response()->json([
              'status'=>'error',
@@ -39,8 +47,25 @@ class QuestionsController extends Controller
 
       return response()->json( ['status'=>'success',
          'code'=>200,
-        'data'=>['questions'=>$questions, 
-        'categories'=>$categories,'levels' =>$levels]]);
+        'data'=>$data, 
+        // 'categories'=>$categories,'levels'=>$levels,
+        ]);
+       
+
+        /**
+        * this part is to used if the response is to be rendered in the view
+
+        
+        $questions = Questions::all();
+        
+        $categories = Category::all();
+        $levels =    Levels::all();
+
+        return view('question.index-question', 
+            compact('questions','categories', 'levels' ));
+
+            */
+
   
     }
 
@@ -68,28 +93,38 @@ class QuestionsController extends Controller
     public function store(Request $request)
     {
         //
-        $this->validate($request, [
-            'level_id'=>'required', 
-            'category_id'=>'required', 
-            'question'=>'required',
-            'option_1'=>'required',
-            'option_2'=>'required',
-            'option_3'=>'required',
-            'option_4'=>'required',
-            'answer'=>'required'
-        ]);
+        $this->validate($request, rules());
 
         $question = Questions::create($request->all());
+        /**
+        *this part is to be used if only json reponsee is required
+       */
         if ($question->save()){
-            return response()->json(['status'=>'success', 'code'=>201, 
-                'message'=>'question added successfully']);
+            return response()->json([
+                'status'=>'success', 'code'=>201, 
+                'message'=>'question added successfully'
+            ]);
         }
 
         else{
-            return response()->json(['status'=>'failed', 'code'=>207, 'message'=>'unknown error'
+            return response()->json([
+                'status'=>'failed',
+                 'code'=>207, 
+                 'message'=>'unknown error'
 
             ]);
         }
+       
+
+        /**
+        *this part is to be used if the response is to be rendered to the view
+               
+                if ($question->save())
+        {
+           $message = 'Question created successfully';
+            return view('question.index-question', compact('message'));
+        }
+        */
     }
 
     /**
@@ -101,9 +136,22 @@ class QuestionsController extends Controller
     public function show($id)
     {
         //
-        $q = Questions::findOrFail($id);
-        $q->load('categories', 'levels');
-        dd($q);
+        $q = Questions::find($id);
+        
+       if (is_null($q) || ( (int)$q->status !==2 )){
+
+        return response()->json([
+            'status'=>'Failed', 
+             'code'=>404,
+             'data'=>null, 
+             'message'=>'Resource Not Found']);
+       }
+       return response()->json([
+        'status'=>'success', 
+        'code'=>200,
+        'data'=>$q, 
+    ]);
+
     }
 
     /**
@@ -114,7 +162,15 @@ class QuestionsController extends Controller
      */
     public function edit($id)
     {
-        //
+
+         
+       $q = Questions::find($id);
+       $categories = Category::all();
+       $levels = Levels::all();
+
+       return view('question.edit-question', compact('q', 'categories', 'levels'));
+
+
     }
 
     /**
@@ -126,7 +182,40 @@ class QuestionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       
+        $this->validate($request, $this->rules());
+
+        $question = Questions::find($id)->update($request->all());
+
+        /**
+        *  This is o be used if the response is to be returned to the view
+        
+        return redirect()->back()->with(['data'=>'Question updated!']);
+
+         */
+
+         /**
+        *  This is o be used if the response is to be returned as json
+        */
+           if ($question)
+           {
+                return response()->json([
+                'status'=>'success', 
+                'code'=>'204',
+                'message'=>'Question updated',
+                ]);
+           }
+               
+          
+           else{
+              return response()->json([
+              'status'=>'error', 
+              'code'=>206, 
+              'message'=>'unkown error'
+              ]);
+           }
+
+           
     }
 
     /**
@@ -137,6 +226,76 @@ class QuestionsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+         Questions::find($id)->delete();
+
+        //  return redirect()->back()->with([
+        //     'message'=>'Question deleted successfully'
+        // ]);
+
+        /**
+        *this part is used when the response is to be returned in json//
+        */
+
+        return response()->json([
+        'status'=>'success', 
+        'code'=>203, 
+        'data'=>'Question deleted'
+        ]);
+        
+    }
+
+    public function rules()
+    {
+        return  [
+            'level_id'=>'required', 
+            'category_id'=>'required', 
+            'question'=>'required',
+            'option_1'=>'required',
+            'option_2'=>'required',
+            'option_3'=>'required',
+            'option_4'=>'required',
+            'answer'=>'required'
+        ];
+    }
+
+    public function approveQuestion($id)
+    {
+        $q = Questions::find($id);
+
+        $status = (int) $q->status;
+
+        if ($status < 2){
+
+            $status += 1;
+        }
+        else{
+            // return redirect()->back()->with([
+            //     'status'=>'Question already approved by two admins'
+            // ]);
+            return response()->json([
+                'status'=>'success',
+                'code'=>203,
+                'message'=>'Question has been  approved by two admins!'
+       
+            ]);
+        }
+        
+        $updated = $q->update(['status'=>$status]);
+
+        if($updated){
+
+            // return redirect()->back()->with([
+            //     'status'=>'Question approved'
+            // ]);
+
+            return response()->json([
+                'status'=>'success',
+                'code'=>203,
+                'message'=>'Question approved',
+
+            ]);
+        }
+
     }
 }
