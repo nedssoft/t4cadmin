@@ -32,13 +32,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 |--------------------------------------------------------------------------------
 */
 
-    Route::resource('/question', 'QuestionsController');
+    Route::resource('/questions', 'QuestionsController');
+    Route::any('/questions/delete/{id}', 'QuestionsController@destroy');
     Route::get('categories', array('as' => 'category.index', 'uses' => 'CategoryController@index'));
     Route::get('categories/add', array('as' => 'category.create', 'uses' => 'CategoryController@create'));
     Route::post('categories/store', array('as' => 'category.store', 'uses' => 'CategoryController@store'));
     Route::get('categories/edit/{id}', array('as' => 'category.edit', 'uses' => 'CategoryController@edit'));
     Route::any('categories/update/{id}', array('as' => 'category.update', 'uses' => 'CategoryController@update'));
     Route::any('categories/delete/{id}', array('as' => 'category.destroy', 'uses' => 'CategoryController@destroy'));
+    Route::any('/questions/{id}/approve', 'QuestionsController@approveQuestion');
 
 
 
