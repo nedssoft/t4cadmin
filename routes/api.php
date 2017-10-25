@@ -19,36 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-  Route::group(['prefix' => 'v1'], function() {
+Route::group(['prefix' => 'App\Api\v1'], function () {
 
-/*
-  |--------------------------------------------------------------------------
-  | Auth API Routes
-  |--------------------------------------------------------------------------
-  |
-  */
+ Route::get('level', 'APILevel@index');
 
-    Route::get('/auth/index', 'AuthController@index1');
-    // Route::post('/login', 'AuthController@login');
-    // Route::post('/signup', 'AuthController@signup');
-   
-/*
-  |--------------------------------------------------------------------------
-  | Player API Routes
-  |--------------------------------------------------------------------------
-  |
-  */
-
-//   Route::get('/index', 'PlayerController@index');
-
-  //get all player details
-//   Route::get('/{player}', 'PlayerController@player');  
-  
-  //get all player level
-//   Route::update('/{player}', 'PlayerController@player');
-
-
-
+<<<<<<< HEAD
  /*
   |--------------------------------------------------------------------------
   | Questions API Routes
@@ -84,3 +59,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   |
   */
   });
+=======
+});
+>>>>>>> 0fa6edbfed1deb58e2be558f32081d84eea825f3

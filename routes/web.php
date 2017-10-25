@@ -73,7 +73,7 @@ Route::post('badge/create', array('as' => 'badge.create', 'uses' => 'BadgeContro
 Route::get('badge', array('as' => 'badge.index', 'uses' => 'BadgeController@index'));
 Route::get('badge/{id}', array('as' => 'badge.badge', 'uses' => 'BadgeController@badge'));
 Route::post('badge/update', array('as' => 'badge.update', 'uses' => 'BadgeController@update'));
-Route::post('badge/delete', array('as' => 'badge.delet', 'uses' => 'BadgeController@delete'));
+Route::post('badge/delete', array('as' => 'badge.delete', 'uses' => 'BadgeController@delete'));
 
 /*
 |--------------------------------------------------------------------------------
@@ -83,6 +83,6 @@ Route::post('badge/delete', array('as' => 'badge.delet', 'uses' => 'BadgeControl
 
 Route::post('level/create', array('as' => 'level.create', 'uses' => 'LevelController@create'));
 Route::get('level', array('as' => 'level.index', 'uses' => 'LevelController@index'));
-Route::get('level/{id}', array('as' => 'badge.badge', 'uses' => 'LevelController@badge'));
-Route::post('level/update', array('as' => 'badge.update', 'uses' => 'LevelController@update'));
-Route::post('level/delete', array('as' => 'badge.delet', 'uses' => 'LevelController@delete'));
+Route::get('level/{id}', array('as' => 'level.level', 'uses' => 'LevelController@level'));
+Route::post('level/update', array('as' => 'level.update', 'uses' => 'LevelController@update'));
+Route::post('level/delete', array('as' => 'level.delete', 'uses' => 'LevelController@delete'));

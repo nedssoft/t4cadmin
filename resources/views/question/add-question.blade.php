@@ -88,6 +88,19 @@
                                 @endif
                             </div>
                         </div>
+-                         <div class="form-group{{ $errors->has('option_4') ? ' has-error' : '' }}">
+-                            <label for="option_4" class="col-md-4 control-label"><span style="color:#48BC9C;" ></span></label>
+-
+-                            <div class="col-md-6">
+-                                <input id="option_4" type="text" class="form-control" name="option_4" placeholder="Enter option_4">
+-
+-                                @if ($errors->has('option_4'))
+-                                    <span class="help-block">
+-                                        <strong>{{ $errors->first('option_4') }}</strong>
+-                                    </span>
+-                                @endif
+-                            </div>
+-                        </div>
                          <div class="form-group{{ $errors->has('answer') ? ' has-error' : '' }}">
                             <label for="answer" class="col-md-4 control-label"><span style="color:#18BC9C;" ></span></label>
 

@@ -4,150 +4,62 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+
 Use App\Levels;
+use App\Api\v1\Level as LevelsAPI;
 
 class LevelController extends Controller
 {
     public function index(){
-        return view('level.level');
+        return LevelsAPI::index();
     }
 
     public function create(Request $request){
         
         $data = $request->all();
         
-        $name = $data['name'];
-        $icon = $data['icon'];
-        $description = $data['description'];
+        //collect API's response and display result based on that
 
-        $level = Levels::create([
-            'name'=>$name,
-            'icon'=>$icon,
-            'description'=>$description
-        ]);
+        $apiResponse = LevelsAPI::create($data);
+        
 
-        if($level){
-            return response()->json([
-                'status'=>'success',
-                'code'=>201,
-                'message'=>'Level was created',
-                'data'=> $levels
-            ]);
-        }else{
-            return response()->json([
-                'status'=>'error',
-                'code'=>504,
-                'message'=>'Something went wrong, level was not created',
-                'data'=> null
-            ]);
-        }
+        //feed view based on response
+        //return('level.levels')->with('message',$response);
+        
 
     }
 
     public function update(Request $request){
         
-        $data = $request->all();       
-        $level = Levels::find($data['id']);
-
-        if($level){
-
-            $level->name = $data['name'];
-            $level->icon = $data['icon'];
-            $level->points = $data['description'];
-            
-            if($level->save()){
-                
-                return response()->json([
-                    'status'=>'Success',
-                    'code'=>201,
-                    'message'=>'Level Updated',
-                    'data'=> null
-                ]);
-
-            }else{
-
-                return response()->json([
-                    'status'=>'error',
-                    'code'=>500,
-                    'message'=>'Level not updated, something went wrong',
-                    'data'=> null
-                ]);
-
-            }            
-
-        }else{
-            return response()->json([
-                'status'=>'error',
-                'code'=>504,
-                'message'=>'Level Not Found',
-                'data'=> null
-            ]);
-        }
-
+        $data = $request->all();   
+        
+        //call API
+        $apiResponse = LevelsAPI::update($data);
+        return  $apiResponse;
+        
     }
 
     public function level($id){
 
-        $level = Levels::find($id);
+        $data = ['id'=>$id];
 
-        if($level){
+        //call API
+        $apiResponse = LevelsAPI::level($data); 
 
-            return response()->json([
-                'status'=>'success',
-                'code'=>200,
-                'message'=>'Level Found',
-                'data'=> null
-            ]);
-
-        }else{
-
-            return response()->json([
-                'status'=>'error',
-                'code'=>500,
-                'message'=>'Badge Not Found',
-                'data'=> null
-            ]);
-
-        }
+        return  $apiResponse;
 
     }
 
     public function delete($id){
 
-        $level = Levels::find($id);
+       $data = ['id'=>$id];
+       $apiResponse = Levels::delete($data);
 
-        if($level){
+        //normally this should feed a view
 
-            if($level->delete()){
+       return $apiResponse;
 
-                return response()->json([
-                    'status'=>'success',
-                    'code'=>200,
-                    'message'=>'Level Deleted',
-                    'data'=> $level
-                ]);
-
-            }else{
-
-                return response()->json([
-                    'status'=>'error',
-                    'code'=>500,
-                    'message'=>'Something went wrong, level was not deleted',
-                    'data'=> $level
-                ]);
-
-            }
-
-        }else{
-
-            return response()->json([
-                'status'=>'error',
-                'code'=>404,
-                'message'=>'Level Not Found',
-                'data'=> null
-            ]);
-
-        }
+       
     }
 
 }
