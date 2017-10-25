@@ -32,7 +32,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 |--------------------------------------------------------------------------------
 */
 
+<<<<<<< HEAD
     
+=======
+    Route::resource('/question', 'QuestionsController');
+
+>>>>>>> 7a2b1ada7a8408e4b32eb2b82201bc4fbbe257b0
     Route::get('categories', array('as' => 'category.index', 'uses' => 'CategoryController@index'));
     Route::get('categories/all', array('as' => 'category.all', 'uses' => 'CategoryController@all'));
     Route::get('categories/add', array('as' => 'category.create', 'uses' => 'CategoryController@create'));
