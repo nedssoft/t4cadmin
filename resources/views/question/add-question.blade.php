@@ -8,7 +8,7 @@
 
                      <div class="panel-body">
                        
-                        <form class="form-horizontal" method="POST" action="/question" enctype="multipart/form-data">
+                        <form class="form-horizontal" method="POST" action="/questions" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
                           @if (session()->has('data'))

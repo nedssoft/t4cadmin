@@ -24,13 +24,14 @@ class CreateQuestionsTable extends Migration
             $table->string('option_3');
             $table->string('option_4');
             $table->string('answer');
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
             
         });
 
 
     Schema::table('questions', function($table) {      
-        $table->foreign('category_id')->references('cid')->on('categories');
+        $table->foreign('category_id')->references('id')->on('categories');
     });
 
     Schema::table('questions', function($table) {      
