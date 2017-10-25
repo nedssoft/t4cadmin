@@ -63,8 +63,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   |--------------------------------------------------------------------------
   |
   */
-  Route::get('categories', 'CategoryController@apiIndex');
-  Route::get('categories/{name}', 'CategoryController@apiShow');
+  Route::get('categories', 'CategoryController@all');
+  Route::get('categories/{id}', 'CategoryController@show');
 
  /*
   |--------------------------------------------------------------------------
