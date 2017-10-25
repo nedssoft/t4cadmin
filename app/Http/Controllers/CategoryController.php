@@ -10,7 +10,7 @@ use Session;
  
 use App\Category;
 
-use App\User;
+
 
 class CategoryController extends Controller
 {
@@ -139,4 +139,29 @@ class CategoryController extends Controller
         return redirect()->route('category.index');
 
     }
+
+    // For API handling
+    public function apiIndex(){
+        $categories = Category::findall('created_at', 'desc');
+        if($categories){
+           /* foreach ($categories as $key) {
+                return response()->json([
+                'status' => 'success',
+                'code'=>200,
+                'message'=>'Level Found',
+                'data'=> null
+                ]);
+
+            }*/
+            return response()->json($categories, 200);
+        }
+
+    }
+
+    public function apiShow($name){
+        $article = Category::find($name);
+        return response()->json($article, 200);
+    }
+
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Category;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +63,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   |--------------------------------------------------------------------------
   |
   */
-
+  Route::get('categories', 'CategoryController@apiIndex');
+  Route::get('categories/{name}', 'CategoryController@apiShow');
 
  /*
   |--------------------------------------------------------------------------

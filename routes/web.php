@@ -32,7 +32,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 |--------------------------------------------------------------------------------
 */
 
-    Route::resource('/question', 'QuestionsController');
+    
     Route::get('categories', array('as' => 'category.index', 'uses' => 'CategoryController@index'));
     Route::get('categories/add', array('as' => 'category.create', 'uses' => 'CategoryController@create'));
     Route::post('categories/store', array('as' => 'category.store', 'uses' => 'CategoryController@store'));
@@ -41,7 +41,12 @@ Route::get('/home', 'HomeController@index')->name('home');
     Route::any('categories/delete/{id}', array('as' => 'category.destroy', 'uses' => 'CategoryController@destroy'));
 
 
-
+/*
+|--------------------------------------------------------------------------------
+| Questioons Routes
+|--------------------------------------------------------------------------------
+*/
+	Route::resource('/question', 'QuestionsController');
 
 /*
 |--------------------------------------------------------------------------------
