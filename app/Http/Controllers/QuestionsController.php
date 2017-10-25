@@ -138,22 +138,15 @@ class QuestionsController extends Controller
      */
     public function edit($id)
     {
-<<<<<<< HEAD
-        //  
+
+         
        $q = Questions::find($id);
        $categories = Category::all();
        $levels = Levels::all();
 
        return view('question.edit-question', compact('q', 'categories', 'levels'));
 
-=======
-        //       $category = Category::findOrFail($cid);
-        $quest = Questions::findOrFail($id)
-        return view('question.edit-question', array('quest' => $quest, 
-            'title' => 'Edit Question' 
 
-        ));
->>>>>>> 46dd852c751e3fd5f6e23228cccab692f35b89b7
     }
 
     /**
