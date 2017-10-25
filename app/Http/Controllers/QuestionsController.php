@@ -123,11 +123,11 @@ class QuestionsController extends Controller
         //
         $q = Questions::find($id);
         
-       if (is_null($q)){
+       if (is_null($q) || ( (int)$q->status !==2 )){
 
-        return response()->json(['status'=>'Failed', 'data'=>null], 404);
+        return response()->json(['status'=>'Failed', 'data'=>null, 'code'=>404, 'message'=>'Resource Not Found']);
        }
-       return response()->json($q, 200);
+       return response()->json(['status'=>'success', 'data'=>$q, 'code'=>200]);
     }
 
     /**
