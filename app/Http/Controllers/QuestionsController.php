@@ -22,6 +22,7 @@ class QuestionsController extends Controller
       /**
 
       *this part is to be used for returnig json response only 
+      */
       $questions = Questions::where('status', 2)->get();
       foreach ($questions as $question) {
 
@@ -42,14 +43,15 @@ class QuestionsController extends Controller
 
       return response()->json( ['status'=>'success',
          'code'=>200,
-        'data'=>['questions'=>$questions, 
-        'categories'=>$categories,'levels' =>$levels]]);
-       */
+        'data'=>$questions, 
+        'categories'=>$categories,'levels'=>$levels,
+        ]);
+       
 
         /**
         * this part is to used if the response is to be rendered in the view
 
-        */
+        
         $questions = Questions::all();
         
         $categories = Category::all();
@@ -57,6 +59,9 @@ class QuestionsController extends Controller
 
         return view('question.index-question', 
             compact('questions','categories', 'levels' ));
+
+            */
+
   
     }
 
@@ -89,27 +94,33 @@ class QuestionsController extends Controller
         $question = Questions::create($request->all());
         /**
         *this part is to be used if only json reponsee is required
-
+       */
         if ($question->save()){
-            return response()->json(['status'=>'success', 'code'=>201, 
-                'message'=>'question added successfully']);
+            return response()->json([
+                'status'=>'success', 'code'=>201, 
+                'message'=>'question added successfully'
+            ]);
         }
 
         else{
-            return response()->json(['status'=>'failed', 'code'=>207, 'message'=>'unknown error'
+            return response()->json([
+                'status'=>'failed',
+                 'code'=>207, 
+                 'message'=>'unknown error'
 
             ]);
         }
-        */
+       
 
         /**
         *this part is to be used if the response is to be rendered to the view
-        */
-        if ($question->save())
+               
+                if ($question->save())
         {
            $message = 'Question created successfully';
             return view('question.index-question', compact('message'));
         }
+        */
     }
 
     /**
@@ -125,9 +136,18 @@ class QuestionsController extends Controller
         
        if (is_null($q) || ( (int)$q->status !==2 )){
 
-        return response()->json(['status'=>'Failed', 'data'=>null, 'code'=>404, 'message'=>'Resource Not Found']);
+        return response()->json([
+            'status'=>'Failed', 
+             'code'=>404,
+             'data'=>null, 
+             'message'=>'Resource Not Found']);
        }
-       return response()->json(['status'=>'success', 'data'=>$q, 'code'=>200]);
+       return response()->json([
+        'status'=>'success', 
+        'code'=>200,
+        'data'=>$q, 
+    ]);
+
     }
 
     /**
@@ -165,14 +185,14 @@ class QuestionsController extends Controller
 
         /**
         *  This is o be used if the response is to be returned to the view
-        */
+        
         return redirect()->back()->with(['data'=>'Question updated!']);
 
-
+         */
 
          /**
         *  This is o be used if the response is to be returned as json
-        
+        */
            if ($question)
            {
                 return response()->json([
@@ -191,7 +211,7 @@ class QuestionsController extends Controller
               ]);
            }
 
-           */
+           
     }
 
     /**
@@ -205,19 +225,20 @@ class QuestionsController extends Controller
         
          Questions::find($id)->delete();
 
-         return redirect()->back()->with([
-            'message'=>'Question deleted successfully'
-        ]);
+        //  return redirect()->back()->with([
+        //     'message'=>'Question deleted successfully'
+        // ]);
 
         /**
         *this part is used when the response is to be returned in json//
+        */
 
         return response()->json([
         'status'=>'success', 
         'code'=>203, 
         'data'=>'Question deleted'
         ]);
-        */
+        
     }
 
     public function rules()
@@ -245,8 +266,14 @@ class QuestionsController extends Controller
             $status += 1;
         }
         else{
-            return redirect()->back()->with([
-                'status'=>'Question already approved by two admins'
+            // return redirect()->back()->with([
+            //     'status'=>'Question already approved by two admins'
+            // ]);
+            return response()->json([
+                'status'=>'success',
+                'code'=>203,
+                'message'=>'Question has been  approved by two admins!'
+       
             ]);
         }
         
@@ -254,8 +281,15 @@ class QuestionsController extends Controller
 
         if($updated){
 
-            return redirect()->back()->with([
-                'status'=>'Question approved'
+            // return redirect()->back()->with([
+            //     'status'=>'Question approved'
+            // ]);
+
+            return response()->json([
+                'status'=>'success',
+                'code'=>203,
+                'message'=>'Question approved',
+
             ]);
         }
 
