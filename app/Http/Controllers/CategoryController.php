@@ -10,7 +10,7 @@ use Session;
  
 use App\Category;
 
-
+use App\User;
 
 class CategoryController extends Controller
 {
@@ -32,6 +32,33 @@ class CategoryController extends Controller
         $cat = Category::orderBy('created_at', 'desc')->paginate($itemsPerPage);
         
         return view('category.index', array('category' => $cat, 'title' => 'Categories'));
+    }
+
+    public function all(){
+        //returns all categories
+
+        $category = Category::all();
+
+        if($category){
+
+            return response()->json([
+                'status'=>'success',
+                'code'=>200,
+                'message'=>'All category fetched',
+                'data'=> $category
+            ]);
+
+        }else{
+
+            return response()->json([
+                'status'=>'error',
+                'code'=>404,
+                'message'=>'No Category Found',
+                'data'=> $category
+            ]);
+
+        }
+
     }
 
     /**
@@ -139,28 +166,4 @@ class CategoryController extends Controller
         return redirect()->route('category.index');
 
     }
-
-    // For API handling
-    public function apiIndex(){
-        $categories = Category::findOrFail('created_at', 'desc');
-        if($categories){
-            foreach ($categories as $key) {
-                return response()->json([
-                'status' => 'success',
-                'code'=>200,
-                'cat_name'=> $key->
-                'data'=> null
-                ]);
-
-            }
-        }
-
-    }
-
-    public function apiShow($name){
-        $article = Category::find($name);
-        return response()->json($article, 200);
-    }
-
-
 }
