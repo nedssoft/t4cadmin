@@ -32,19 +32,26 @@ Route::get('/home', 'HomeController@index')->name('home');
 |--------------------------------------------------------------------------------
 */
 
-    Route::resource('/questions', 'QuestionsController');
-    Route::any('/questions/delete/{id}', 'QuestionsController@destroy');
+
     Route::get('categories', array('as' => 'category.index', 'uses' => 'CategoryController@index'));
+    Route::get('categories/all', array('as' => 'category.all', 'uses' => 'CategoryController@all'));
     Route::get('categories/add', array('as' => 'category.create', 'uses' => 'CategoryController@create'));
     Route::post('categories/store', array('as' => 'category.store', 'uses' => 'CategoryController@store'));
     Route::get('categories/edit/{id}', array('as' => 'category.edit', 'uses' => 'CategoryController@edit'));
     Route::any('categories/update/{id}', array('as' => 'category.update', 'uses' => 'CategoryController@update'));
     Route::any('categories/delete/{id}', array('as' => 'category.destroy', 'uses' => 'CategoryController@destroy'));
-    Route::any('/questions/{id}/approve', 'QuestionsController@approveQuestion');
+    
 
 
-
-
+/*
+|--------------------------------------------------------------------------------
+| Questioons Routes
+|--------------------------------------------------------------------------------
+*/
+	
+	Route::resource('/questions', 'QuestionsController');// a resource route comprising PATCH for updating question, POST for adding new question, getting all approved question and for editing a question
+    Route::any('/questions/delete/{id}', 'QuestionsController@destroy');// for deleting a question
+    Route::any('/questions/{id}/approve', 'QuestionsController@approveQuestion');// for approving a question
 /*
 |--------------------------------------------------------------------------------
 | Player Routes

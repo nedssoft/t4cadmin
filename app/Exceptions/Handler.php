@@ -46,12 +46,20 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
-    {   if ($exception instanceof ModeNotFoundException && $resquest->wantsJson())
-        {
-            return response()->json(['error'=>'Resource Not Found'], 404);
-        }
-        
-        return parent::render($request, $exception);
+
+public function render($request, Exception $exception)
+{
+    
+    
+    if ($exception instanceof ModelNotFoundException &&
+        $request->wantsJson())
+    {
+        return response()->json([
+            'data' => 'Resource not found'
+        ], 404);
+
     }
+
+    return parent::render($request, $exception);
+}
 }

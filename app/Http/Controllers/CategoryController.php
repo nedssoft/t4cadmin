@@ -34,6 +34,33 @@ class CategoryController extends Controller
         return view('category.index', array('category' => $cat, 'title' => 'Categories'));
     }
 
+    public function all(){
+        //returns all categories
+
+        $category = Category::all();
+
+        if($category){
+
+            return response()->json([
+                'status'=>'success',
+                'code'=>200,
+                'message'=>'All category fetched',
+                'data'=> $category
+            ]);
+
+        }else{
+
+            return response()->json([
+                'status'=>'error',
+                'code'=>404,
+                'message'=>'No Category Found',
+                'data'=> $category
+            ]);
+
+        }
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
