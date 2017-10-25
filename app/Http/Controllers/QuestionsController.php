@@ -175,12 +175,20 @@ class QuestionsController extends Controller
         
            if ($question)
            {
-                return response()->json(['status'=>$question, 'code'=>'204');
+                return response()->json([
+                'status'=>'success', 
+                'code'=>'204',
+                'message'=>'Question updated',
+                ]);
            }
                
           
            else{
-              return response()->json(['status'=>'error', 'code'=>206, 'message'=>'unkown error']);
+              return response()->json([
+              'status'=>'error', 
+              'code'=>206, 
+              'message'=>'unkown error'
+              ]);
            }
 
            */
@@ -197,10 +205,18 @@ class QuestionsController extends Controller
         
          Questions::find($id)->delete();
 
-         return redirect()->back()->with(['message'=>'Question deleted successfully']);
+         return redirect()->back()->with([
+            'message'=>'Question deleted successfully'
+        ]);
+
         /**
-        *this part is used when the response is to be returned in json
-        return response()->json(['status'=>'success', 'code'=>203, 'data'=>'Question deleted']);
+        *this part is used when the response is to be returned in json//
+
+        return response()->json([
+        'status'=>'success', 
+        'code'=>203, 
+        'data'=>'Question deleted'
+        ]);
         */
     }
 
@@ -229,14 +245,18 @@ class QuestionsController extends Controller
             $status += 1;
         }
         else{
-            return redirect()->back()->with(['status'=>'Question already approved by two admins']);
+            return redirect()->back()->with([
+                'status'=>'Question already approved by two admins'
+            ]);
         }
         
         $updated = $q->update(['status'=>$status]);
 
         if($updated){
 
-            return redirect()->back()->with(['status'=>'Question approved']);
+            return redirect()->back()->with([
+                'status'=>'Question approved'
+            ]);
         }
 
     }
