@@ -31,7 +31,7 @@ class CreateQuestionsTable extends Migration
 
 
     Schema::table('questions', function($table) {      
-        $table->foreign('category_id')->references('cid')->on('categories');
+        $table->foreign('category_id')->references('id')->on('categories');
     });
 
     Schema::table('questions', function($table) {      

@@ -13,14 +13,14 @@ class Questions extends Model
         'option_3', 'option_4', 'answer','status'
     ];
 
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function levels()
+    public function level()
     {
-        return $this->belongsTo(Level::class);
+        return $this->belongsTo(Levels::class);
     }
 
    

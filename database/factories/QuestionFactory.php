@@ -4,7 +4,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Questions::class, function (Faker $faker) {
 
-	 $cat_id = App\Category::pluck('cid')->toArray();
+	 $cat_id = App\Category::pluck('id')->toArray();
 	 $level_id = App\Levels::pluck('id')->toArray();
     return [
         //

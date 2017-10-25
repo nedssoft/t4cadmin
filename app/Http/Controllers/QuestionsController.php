@@ -18,20 +18,24 @@ class QuestionsController extends Controller
     {
 
 
-      
+      $data = array();
       /**
 
       *this part is to be used for returnig json response only 
       */
       $questions = Questions::where('status', 2)->get();
+
       foreach ($questions as $question) {
 
-        
-        $categories[] = Category::find($question->category_id);
-        $levels[] =   Levels::find($question->level_id);
-          
+         
+         $data['questions'][] =  $question;
+        $data['category'][]   =  $question->category()->get();
+         $data['level'][]     =  $question->level()->get();
+       
+         
       }
-        if(empty($questions) || empty($categories) || empty($levels))
+
+        if(empty($data) )
         {
             return response()->json([
              'status'=>'error',
@@ -43,8 +47,8 @@ class QuestionsController extends Controller
 
       return response()->json( ['status'=>'success',
          'code'=>200,
-        'data'=>$questions, 
-        'categories'=>$categories,'levels'=>$levels,
+        'data'=>$data, 
+        // 'categories'=>$categories,'levels'=>$levels,
         ]);
        
 
