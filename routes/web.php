@@ -46,8 +46,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 | Questioons Routes
 |--------------------------------------------------------------------------------
 */
-	Route::resource('/question', 'QuestionsController');
-
+	//Route::resource('/question', 'QuestionsController');
+	Route::get('questions/edit/{id}', array('as' => 'questions.edit-question', 'uses' => 'QuestionsController@edit',));
 /*
 |--------------------------------------------------------------------------------
 | Player Routes

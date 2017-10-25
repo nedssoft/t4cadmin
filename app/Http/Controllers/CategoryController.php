@@ -142,18 +142,17 @@ class CategoryController extends Controller
 
     // For API handling
     public function apiIndex(){
-        $categories = Category::findall('created_at', 'desc');
+        $categories = Category::findOrFail('created_at', 'desc');
         if($categories){
-           /* foreach ($categories as $key) {
+            foreach ($categories as $key) {
                 return response()->json([
                 'status' => 'success',
                 'code'=>200,
-                'message'=>'Level Found',
+                'cat_name'=> $key->
                 'data'=> null
                 ]);
 
-            }*/
-            return response()->json($categories, 200);
+            }
         }
 
     }

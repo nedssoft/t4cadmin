@@ -114,7 +114,12 @@ class QuestionsController extends Controller
      */
     public function edit($id)
     {
-        //
+        //       $category = Category::findOrFail($cid);
+        $quest = Questions::findOrFail($id)
+        return view('question.edit-question', array('quest' => $quest, 
+            'title' => 'Edit Question' 
+
+        ));
     }
 
     /**
