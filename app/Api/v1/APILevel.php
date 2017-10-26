@@ -8,10 +8,8 @@ Use App\Levels;
 
 class APILevel
 {
-    public function index(){
-
-        return "here";
-
+    public static function index(){
+        
         $all = Levels::all();
 
         if($all){

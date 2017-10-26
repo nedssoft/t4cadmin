@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Category;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['prefix' => 'App\Api\v1'], function () {
+Route::group(['prefix' => 'v1'], function () {
 
  Route::get('level', 'APILevel@index');
 
