@@ -20,7 +20,7 @@ class Levels extends Model
 
     public function questions()
     {
-    	return $this->hasMany(Questions::class);
+        return $this->hasMany(Questions::class);
     }
 
 use Illuminate\Database\Eloquent\Model;
