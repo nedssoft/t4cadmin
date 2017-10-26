@@ -38,7 +38,8 @@ Route::group(['prefix' => 'App\Api\v1'], function () {
   |--------------------------------------------------------------------------
   |
   */
-  Route::get('categories', 'CategoryController@all');
+  Route::get('categories', 'ApiCategory@index');
+  Route::post('categories', 'ApiCategory@create');
   Route::get('categories/{id}', 'CategoryController@show');
 
  /*
