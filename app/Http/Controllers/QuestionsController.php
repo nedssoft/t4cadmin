@@ -29,8 +29,8 @@ class QuestionsController extends Controller
 
          
          $data['questions'][] =  $question;
-        $data['category'][]   =  $question->category()->get();
-         $data['level'][]     =  $question->level()->get();
+         $data['category'][]   =  $question->category;
+         $data['level'][]     =  $question->level;
        
          
       }

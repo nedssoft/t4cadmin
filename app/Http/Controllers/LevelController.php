@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 
 Use App\Levels;
-use App\Api\v1\Level as LevelsAPI;
+use App\Api\v1\APILevel as LevelsAPI;
 
 class LevelController extends Controller
 {

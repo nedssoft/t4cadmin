@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,4 +22,13 @@ class Levels extends Model
     {
     	return $this->hasMany(Questions::class);
     }
+
+use Illuminate\Database\Eloquent\Model;
+
+class Levels extends Model
+{   
+    protected $fillable = [
+        'name', 'description', 'icon'
+    ];
+
 }
