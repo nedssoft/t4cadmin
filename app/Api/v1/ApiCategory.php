@@ -25,7 +25,7 @@ class CategoryController extends Controller
 
         $category = Category::all();
 
-        if($category){
+        if($category && !empty($category)){
 
             return response()->json([
                 'status'=>'success',
@@ -81,53 +81,39 @@ class CategoryController extends Controller
                 'code' => 201,
                 'message' => 'Category was created',
                 'data' => $input
-            ])
+            ]);
         }else{
             return response()->json([
                 'status' => 'errir',
                 'code' => 504,
                 'message' => 'Something went wrong, category was not created',
                 'data' => inpull
-            ])
+            ]);
 
         }
         
     }
+    /*
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    Show a specified category
+
+
+
+    */
+
+    public function show($id)
     {
-
+        $category = Category::findOrFail($id);
+        if ($category) {
+            return response()->json([
+                'status' => 'success',
+                'code' => 201,
+                'message' => 'Category Found',
+                'data' =>$category
+            ]);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $cid
-     * @return \Illuminate\Http\Response
-     */
-    
-    public function show($cid)
-    {
-        
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $cid
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($cid)
-    {
-        $category = Category::findOrFail($cid);
-        return view('category.edit', array('category' => $category, 'title' => 'Edit Category'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -136,24 +122,27 @@ class CategoryController extends Controller
      * @param  int  $cid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $cid)
+    public function update(Request $request, $id)
     {
-        $category = Category::findOrFail($cid);
- 
-        $this->validate($request, array(
-                                'name' => 'required',
-                                'description' => 'required',
-                                'imgUrl' => 'required',
-                            )
-                        );
- 
-        $input = $request->all();
- 
-        $category->fill($input)->save();
- 
-        Session::flash('flash_message', 'Category updated successfully!');
- 
-        return redirect()->route('category.index');
+        $category = Article::findOrFail($id);
+        $category->update($request->all());
+
+        if($category){
+            return response()->json([
+                'status' => 'success',
+                'code' => 201,
+                'message' =>  'Category updated',
+                'data' => null
+            ]);
+        }else{
+            return response()->json9([
+                'status' =>'error',
+                'code' => 500,
+                'message' => 'Category not updated, Something went wrong',
+                'data' => null
+            ]);
+        }
+
     }
 
     /**
@@ -162,15 +151,26 @@ class CategoryController extends Controller
      * @param  int  $cid
      * @return \Illuminate\Http\Response
      */
-    public function destroy($cid)
+    public function destroy($id)
     {
-        $category = Category::findOrFail($cid);
+        $category = Category::findOrFail($id);
  
-        $category->delete();
- 
-        Session::flash('flash_message', 'Category has been deleted!');
- 
-        return redirect()->route('category.index');
+        if($category->delete()){
+            return response()->json([
+                'status' => 'success',
+                'code' => 201,
+                'message' =>  'Category deleted',
+                'data' => $category
+            ]);
 
+        }else{
+            return response()->json([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'Category was not deleted, Something went wrong',
+                'data' => null
+            ]);
+        }
     }
+
 }
