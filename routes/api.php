@@ -23,7 +23,7 @@ Route::group(['prefix' => 'App\Api\v1'], function () {
 
  Route::get('level', 'APILevel@index');
 
-<<<<<<< HEAD
+
  /*
   |--------------------------------------------------------------------------
   | Questions API Routes
@@ -58,7 +58,7 @@ Route::group(['prefix' => 'App\Api\v1'], function () {
   |--------------------------------------------------------------------------
   |
   */
-  });
-=======
+
+
 });
->>>>>>> 0fa6edbfed1deb58e2be558f32081d84eea825f3
+
