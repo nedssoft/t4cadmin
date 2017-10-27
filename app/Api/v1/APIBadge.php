@@ -4,7 +4,7 @@ namespace App\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Badges;
-use App\PlayerBadge;
+use App\PlayerBadges;
 
 use Response;
 
@@ -173,7 +173,7 @@ class APIBadge
                 $player_id = $data['player_id'];
                 $badge_id = $data['badge_id'];
         
-                $createPlayerBadge = PlayerBadge::create([
+                $createPlayerBadge = PlayerBadges::create([
                     'player_id'=>$player_id,
                     'badge_id'=>$badge_id
                 ]);

@@ -16,6 +16,7 @@ class CreatePlayersTable extends Migration
         Schema::create('players', function (Blueprint $table) {
             $table->string('name')->nullable(); //player name, nullable because they can decide not to give us name
             $table->string('username'); // display name
+            $table->string('phone'); // display name
             $table->string('email')->unique(); 
             $table->string('password');                                
             $table->increments('id');
