@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,3 +17,50 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::group(['prefix' => 'v1'], function () {
+
+ Route::get('level', 'APILevel@index');
+
+
+ /*
+  |--------------------------------------------------------------------------
+  | Questions API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+  Route::get('questions/{category_id}/{sib_category}', 'ApiQuestion@index');
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Categories API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+  Route::get('categories', 'ApiCategory@index');
+  Route::post('categories/store', 'ApiCategory@create');
+  Route::get('categories/{id}', 'ApiCategory@show');
+
+ /*
+  |--------------------------------------------------------------------------
+  | Badges API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+
+   Route::get('/index', 'BadgesController@index');
+   Route::get('/create', 'BadgesController@create');
+
+
+ /*
+  |--------------------------------------------------------------------------
+  | Levels API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+
+
+});
+
