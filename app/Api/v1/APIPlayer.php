@@ -53,13 +53,26 @@ class PlayerController extends Controller
                 
                 if($player->save()){
 
-                    $createBadgeData = ['id'=>$player->id, 'badge'=>'1'];
-                    $createLevelData = ['id'=>$player->id, 'level'=>'1'];
-                    $createPointData = ['id'=>$player->id, 'point'=>'0'];
+                    /** 
+                     * SETUP PLAYER ACCOUNT
+                    */
+
+                    $createBadgeData = ['player_id'=>$player->id, 'badge_id'=>'1'];
+                    $createLevelData = ['player_id'=>$player->id, 'level_id'=>'1'];
+                    $createPointData = ['player_id'=>$player->id, 'point'=>'0'];
 
                    $addLevel = APILevel::createPlayerLevel($createLevelData);
                    $addBagde = APIBadge::createPlayerBadge($createBadgeData);
-                   $addPoint = APIPoint::createPlayerPoint($createPointData);
+                   $addPoint = APIPoint::UpdatePlayerPoint($createPointData);
+
+                   if(!$addLevel || !$addBagde || !$addPoint ){
+                    return response()->json([
+                        'status'=>'success',
+                        'code'=>201,
+                        'message'=>'player account created, but setup is not completed',
+                        'data'=> $player
+                    ]);
+                   }
 
                     return response()->json([
                         'status'=>'success',
