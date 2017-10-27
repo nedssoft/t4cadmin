@@ -13,7 +13,7 @@ use App\Api\v1\APIPoint;
 Use App\Players;
 
 
-class APILevel 
+class APIPlayer
 {
     
     //create new player
@@ -141,11 +141,11 @@ class APILevel
 
         }
 
-        public function player(Array $data){
-            $id = $data['id'];          
+        public function player($id){
+                    
             $player = Players::find($id);
             
-            if(count($player)){
+            if(count($player) < 1){
                 return response()->json([
                     'status'=>'error',
                     'code'=>404,
