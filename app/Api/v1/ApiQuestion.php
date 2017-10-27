@@ -16,13 +16,12 @@ class QuestionsController extends Controller
      */
     public function index()
     {
+            /*
 
+            
 
       $data = array();
-      /**
-
-      *this part is to be used for returnig json response only 
-      */
+  
       $questions = Questions::where('status', 2)->get();
 
       foreach ($questions as $question) {
@@ -45,14 +44,16 @@ class QuestionsController extends Controller
             ]);
         }
 
-      return response()->json( ['status'=>'success',
+      return response()->json([
+        'status'=>'success',
          'code'=>200,
+         'status' => 'success',
+         'message'=> 'qustions fetched',
         'data'=>$data, 
-        // 'categories'=>$categories,'levels'=>$levels,
         ]);
        
 
- 
+    */
   
     }
 
