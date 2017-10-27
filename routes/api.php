@@ -40,7 +40,7 @@ Route::group(['prefix' => 'v1'], function () {
   */
   Route::get('categories', 'ApiCategory@index');
   Route::post('categories', 'ApiCategory@create');
-  Route::get('categories/{id}', 'CategoryController@show');
+  Route::get('categories/{id}', 'ApiCategory@show');
 
  /*
   |--------------------------------------------------------------------------
