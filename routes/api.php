@@ -49,9 +49,9 @@ Route::group(['prefix' => 'v1'], function () {
   |
   */
 
-//   Route::get('/index', 'BadgesController@index');
-//   Route::get('/create', 'BadgesController@create');
-//   Route::get('/signup', 'BadgesController@signup');
+   Route::get('/index', 'BadgesController@index');
+   Route::get('/create', 'BadgesController@create');
+
 
  /*
   |--------------------------------------------------------------------------

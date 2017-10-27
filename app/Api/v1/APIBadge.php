@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Badges;
 use App\PlayerBadge;
 
+use Response;
 
-
-class BadgeController extends Controller
+class APIBadge 
 {
     
     public function index(){
