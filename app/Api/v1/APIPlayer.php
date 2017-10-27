@@ -13,7 +13,7 @@ use App\Api\v1\APIPoint;
 Use App\Players;
 
 
-class PlayerController extends Controller
+class APILevel 
 {
     
     //create new player
