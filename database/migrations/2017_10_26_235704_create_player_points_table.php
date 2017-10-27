@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlayerLevelsTable extends Migration
+class CreatePlayerPointsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,7 @@ class CreatePlayerLevelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('player_levels', function (Blueprint $table) {
-            $table->string('player_id');                        
-            $table->string('level_id');                        
+        Schema::create('player_points', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
         });
@@ -28,6 +26,6 @@ class CreatePlayerLevelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('player_levels');
+        Schema::dropIfExists('player_points');
     }
 }

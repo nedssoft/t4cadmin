@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Levels extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      *
@@ -16,19 +15,11 @@ class Levels extends Model
      */
     protected $fillable = [
         'name', 'icon','description'
-    ];
+    ]; 
 
     public function questions()
     {
     	return $this->hasMany(Questions::class);
-    }
-
-use Illuminate\Database\Eloquent\Model;
-
-class Levels extends Model
-{   
-    protected $fillable = [
-        'name', 'description', 'icon'
-    ];
+    }    
 
 }

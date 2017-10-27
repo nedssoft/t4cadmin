@@ -3,23 +3,26 @@
 namespace App\Api\v1;
 
 use Illuminate\Http\Request;
+use Response;
 
-Use App\Levels;
+use App\Levels;
+use App\PlayerLevel;
 
 class APILevel
 {
     public static function index(){
-        
+                
         $all = Levels::all();
 
-        if($all){
+        $options = app('request')->header('accept-charset') == 'utf-8' ? JSON_UNESCAPED_UNICODE : null;
 
-            return response()->json([
+        if($all){             
+            return Response::json([
                 'status'=>'success',
                 'code'=>201,
                 'message'=>'All Levels',
                 'data'=> $all
-            ]);
+            ],200, JSON_UNESCAPED_UNICODE );
 
         }else{
             return response()->json([
@@ -28,8 +31,7 @@ class APILevel
                 'message'=>'No levels',
                 'data'=> null
             ]);
-        }
-        
+        }        
 
     }
 
@@ -174,5 +176,68 @@ class APILevel
 
         }
     }
+
+    public static function createPlayerLevel(Array $data){
+
+        $player_id = $data['player_id'];
+        $level_id = $data['level_id'];
+
+        $createPlayerLevel = PlayerLevel::create([
+            'player_id'=>$player_id,
+            'level_id'=>$level_id
+        ]);
+
+        if($createPlayerLevel){
+
+            return response()->json([
+                'status'=>'success',
+                'code'=>200,
+                'message'=>'Player Level Created',
+                'data'=> $createPlayerLevel
+            ]);
+
+        }else{
+            return response()->json([
+                'status'=>'error',
+                'code'=>500,
+                'message'=>'Player Level Not Created',
+                'data'=> null
+            ]);
+        }
+
+    }
+
+    public static function updatePlayerLevel(Array $data){
+        
+                $player_id = $data['player_id'];
+                $level_id = $data['level_id'];
+        
+                $findPlayerLevel = PlayerLevel::find($player_id);
+
+                if($findPlayerLevel){
+                    $findPlayerLevel->level_id = $level_id;
+
+                    $updatePlayerLevel = $findPlayerLevel->save();
+
+                    if($updatePlayerLevel){
+
+                        return response()->json([
+                            'status'=>'success',
+                            'code'=>200,
+                            'message'=>'Player Level Updated',
+                            'data'=> $updatePlayerLevel
+                        ]);
+
+                    }else{
+                        return response()->json([
+                            'status'=>'error',
+                            'code'=>500,
+                            'message'=>'Player Level Not Updated',
+                            'data'=> null
+                        ]);
+                    }
+                }
+        
+            }
 
 }

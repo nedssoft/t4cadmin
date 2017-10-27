@@ -81,14 +81,14 @@ class CategoryController extends Controller
                 'code' => 201,
                 'message' => 'Category was created',
                 'data' => $input
-            ])
+            ]);
         }else{
             return response()->json([
                 'status' => 'errir',
                 'code' => 504,
                 'message' => 'Something went wrong, category was not created',
                 'data' => inpull
-            ])
+            ]);
 
         }
         
