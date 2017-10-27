@@ -3,14 +3,13 @@
 namespace App\Api\v1;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
  
 use App\Category;
 
-use App\User;
+use Reponse;
 
-class CategoryController extends Controller
+
+class ApiCategory 
 {
     /**
      * Display a listing of the resource.
