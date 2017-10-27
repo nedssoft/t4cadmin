@@ -30,6 +30,7 @@ Route::group(['prefix' => 'v1'], function () {
   |--------------------------------------------------------------------------
   |
   */
+  Route::get('questions/{category_id}/{sib_category}', 'ApiQuestion@index');
 
 
   /*
@@ -39,7 +40,7 @@ Route::group(['prefix' => 'v1'], function () {
   |
   */
   Route::get('categories', 'ApiCategory@index');
-  Route::post('categories', 'ApiCategory@create');
+  Route::post('categories/store', 'ApiCategory@create');
   Route::get('categories/{id}', 'ApiCategory@show');
 
  /*
