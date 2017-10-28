@@ -1,7 +1,6 @@
 <?php
 
 namespace App;
-<<<<<<< HEAD
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Passport\HasApiTokens;
@@ -10,20 +9,12 @@ class Players extends Model
 {
     use HasApiTokens, Notifiable;
     
-=======
-
-use Illuminate\Database\Eloquent\Model;
-
-class Players extends Model
-{
->>>>>>> 27818cd36302771bdb209252bfc5dc8a523ebd50
      /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-<<<<<<< HEAD
         'name', 'email', 'password','phone','username'
     ]; 
 
@@ -45,8 +36,4 @@ class Players extends Model
         return $this->hasOne('App\Points');
     }
 
-=======
-        'name', 'username','email','password','level'
-    ];
->>>>>>> 27818cd36302771bdb209252bfc5dc8a523ebd50
 }
