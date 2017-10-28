@@ -50,17 +50,19 @@ Route::group(['prefix' => 'v1'], function () {
   |
   */
 
-   Route::get('/index', 'BadgesController@index');
-   Route::get('/create', 'BadgesController@create');
+   Route::get('badge/index', 'APIBadge@index');
+   Route::get('badge/create', 'APIBadge@create');
 
 
  /*
   |--------------------------------------------------------------------------
-  | Levels API Routes
+  | Player API Routes
   |--------------------------------------------------------------------------
   |
   */
-
+  Route::post('player/create', 'APIPlayer@create');
+  Route::post('player/login', 'APIPlayer@login');
+  Route::get('player/{id}', 'APIPlayer@player');
 
 });
 

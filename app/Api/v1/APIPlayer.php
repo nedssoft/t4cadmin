@@ -3,6 +3,7 @@
 namespace App\Api\v1;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 use Response;
 
@@ -13,7 +14,7 @@ use App\Api\v1\APIPoint;
 Use App\Players;
 
 
-class PlayerController extends Controller
+class APIPlayer
 {
     
     //create new player
@@ -23,9 +24,10 @@ class PlayerController extends Controller
 	 * @param Array of Player details
 	 * @return JSON response success | error
 	 */
-  public static function signup(Array $data)
+  public static function create(Request $request)
   {	  
-       
+       $data = $request->all();
+
 	  	$name = filter_var($data['name'], FILTER_SANITIZE_STRING);		
 		$username = filter_var($data['username'], FILTER_SANITIZE_STRING);	
 	  	$email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
@@ -66,12 +68,14 @@ class PlayerController extends Controller
                    $addPoint = APIPoint::UpdatePlayerPoint($createPointData);
 
                    if(!$addLevel || !$addBagde || !$addPoint ){
+
                     return response()->json([
                         'status'=>'success',
                         'code'=>201,
                         'message'=>'player account created, but setup is not completed',
                         'data'=> $player
                     ]);
+
                    }
 
                     return response()->json([
@@ -95,9 +99,9 @@ class PlayerController extends Controller
 
     }
     
-    public static function login(Array $data)
+    public static function login(Request $request)
     {             
-
+            $data = $request->all();
             $username = filter_var($data['username'], FILTER_SANITIZE_STRING);
             $password = $data['password'];
            
@@ -141,11 +145,11 @@ class PlayerController extends Controller
 
         }
 
-        public function player(Array $data){
-            $id = $data['id'];          
+        public function player($id){
+                    
             $player = Players::find($id);
             
-            if(count($player)){
+            if(count($player) < 1){
                 return response()->json([
                     'status'=>'error',
                     'code'=>404,

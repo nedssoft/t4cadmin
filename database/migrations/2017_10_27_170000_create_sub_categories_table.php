@@ -20,11 +20,7 @@ class CreateSubCategoriesTable extends Migration
             $table->text('description');
             $table->string('imgUrl');
             $table->timestamps();
-        });
-
-        Schema::table('sub_categories', function($table) {      
-            $table->foreign('categories_id')->references('id')->on('categories')->onDelete('cascade');;
-        });
+        });        
     }
 
     /**
