@@ -3,8 +3,8 @@
 namespace App;
 
 
-use Illuminate\Notifications\Notifiable;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
 class PlayerBadges extends Model
@@ -21,9 +21,11 @@ class PlayerBadges extends Model
 
     
 
+
        
     protected $fillable = [
         'player', 'badge'
     ];
+
 
 }

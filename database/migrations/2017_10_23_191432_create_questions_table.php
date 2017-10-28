@@ -16,7 +16,7 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
 
             $table->increments('id');
-            $table->integer('category_id')->unsigned();            
+            $table->integer('categories_id')->unsigned();            
             $table->integer('level_id')->unsigned();            
             $table->text('question');
             $table->string('option_1');
@@ -28,15 +28,6 @@ class CreateQuestionsTable extends Migration
             $table->timestamps();
             
         });
-
-
-    Schema::table('questions', function($table) {      
-        $table->foreign('category_id')->references('id')->on('categories');
-    });
-
-    Schema::table('questions', function($table) {      
-        $table->foreign('level_id')->references('id')->on('levels');
-    });
 
 }
 

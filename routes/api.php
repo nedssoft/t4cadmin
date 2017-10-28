@@ -30,6 +30,7 @@ Route::group(['prefix' => 'v1'], function () {
   |--------------------------------------------------------------------------
   |
   */
+  Route::get('questions/{category_id}/{sib_category}', 'ApiQuestion@index');
 
 
   /*
@@ -38,8 +39,9 @@ Route::group(['prefix' => 'v1'], function () {
   |--------------------------------------------------------------------------
   |
   */
-  Route::get('categories', 'CategoryController@all');
-  Route::get('categories/{id}', 'CategoryController@show');
+  Route::get('categories', 'ApiCategory@index');
+  Route::post('categories/store', 'ApiCategory@create');
+  Route::get('categories/{id}', 'ApiCategory@show');
 
  /*
   |--------------------------------------------------------------------------
@@ -48,17 +50,19 @@ Route::group(['prefix' => 'v1'], function () {
   |
   */
 
-//   Route::get('/index', 'BadgesController@index');
-//   Route::get('/create', 'BadgesController@create');
-//   Route::get('/signup', 'BadgesController@signup');
+   Route::get('badge/index', 'APIBadge@index');
+   Route::get('badge/create', 'APIBadge@create');
+
 
  /*
   |--------------------------------------------------------------------------
-  | Levels API Routes
+  | Player API Routes
   |--------------------------------------------------------------------------
   |
   */
-
+  Route::post('player/create', 'APIPlayer@create');
+  Route::post('player/login', 'APIPlayer@login');
+  Route::get('player/{id}', 'APIPlayer@player');
 
 });
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlayerBadgesTable extends Migration
+class CreateSubCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreatePlayerBadgesTable extends Migration
      */
     public function up()
     {
-        Schema::create('player_badges', function (Blueprint $table) {
-            $table->integer('player_id'); //player id
-            $table->integer('badge_id'); //badge id
+        Schema::create('sub_categories', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('categories_id');            
+            $table->string('name');
+            $table->text('description');
+            $table->string('imgUrl');
             $table->timestamps();
-        });
+        });        
     }
 
     /**
@@ -28,6 +30,6 @@ class CreatePlayerBadgesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('player_badges');
+        Schema::dropIfExists('sub_categories');
     }
 }

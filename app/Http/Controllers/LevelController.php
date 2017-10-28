@@ -11,7 +11,13 @@ use App\Api\v1\APILevel as LevelsAPI;
 class LevelController extends Controller
 {
     public function index(){
-        return LevelsAPI::index();
+
+        $levels = LevelsAPI::index(); 
+       
+        json_decode($levels);
+        echo json_last_error();
+        return view('level.level')->with('levels',json_decode($levels));       
+       
     }
 
     public function create(Request $request){
@@ -20,9 +26,8 @@ class LevelController extends Controller
         
         //collect API's response and display result based on that
 
-        $apiResponse = LevelsAPI::create($data);
-        
-
+        $apiResponse = LevelsAPI::create($data);        
+       // $obj2 = json_decode( $json, true );
         //feed view based on response
         //return('level.levels')->with('message',$response);
         

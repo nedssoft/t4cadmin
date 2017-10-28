@@ -8,6 +8,14 @@
                 <div class="panel-heading">
                Welcome, {{Auth::user()->name}} 
                
+               @if(isset($levels))
+                 
+                 @foreach($levels->data as $l)
+                    {{ $l }}
+                 @endforeach
+
+               @endif
+
                 </div> 
                 @if(isset($message)) 
                  <div class="alert alert-info alert-info fade in">

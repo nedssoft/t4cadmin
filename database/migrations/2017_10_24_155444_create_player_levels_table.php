@@ -14,6 +14,8 @@ class CreatePlayerLevelsTable extends Migration
     public function up()
     {
         Schema::create('player_levels', function (Blueprint $table) {
+            $table->string('player_id');                        
+            $table->string('level_id');                        
             $table->increments('id');
             $table->timestamps();
         });
