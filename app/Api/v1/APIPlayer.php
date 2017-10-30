@@ -59,9 +59,9 @@ class APIPlayer
                      * SETUP PLAYER ACCOUNT
                     */
 
-                    $createBadgeData = ['player_id'=>$player->id, 'badge_id'=>'1'];
-                    $createLevelData = ['player_id'=>$player->id, 'level_id'=>'1'];
-                    $createPointData = ['player_id'=>$player->id, 'point'=>'0'];
+                    $createBadgeData = ['player_id'=>$player->id, 'badge_id'=>'1']; //add initial badge
+                    $createLevelData = ['player_id'=>$player->id, 'level_id'=>'1']; //add initial level
+                    $createPointData = ['player_id'=>$player->id, 'point'=>'0']; //add initial point
 
                    $addLevel = APILevel::createPlayerLevel($createLevelData);
                    $addBagde = APIBadge::createPlayerBadge($createBadgeData);

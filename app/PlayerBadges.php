@@ -19,13 +19,4 @@ class PlayerBadges extends Model
         'player_id', 'badge_id'
     ];
 
-    
-
-
-       
-    protected $fillable = [
-        'player', 'badge'
-    ];
-
-
 }
