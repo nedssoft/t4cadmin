@@ -14,7 +14,7 @@ class Players extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','phone','username'
+        'name', 'email', 'password','phone','username', 'token'
     ]; 
 
     //get player badges

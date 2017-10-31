@@ -86,3 +86,7 @@ Route::get('level', array('as' => 'level.index', 'uses' => 'LevelController@inde
 Route::get('level/{id}', array('as' => 'level.level', 'uses' => 'LevelController@level'));
 Route::post('level/update', array('as' => 'level.update', 'uses' => 'LevelController@update'));
 Route::post('level/delete', array('as' => 'level.delete', 'uses' => 'LevelController@delete'));
+
+// Test Routes
+Route::get('token/generate','TokenizerController@generate');
+Route::get('token/refresh/{id}','TokenizerController@refresh');
