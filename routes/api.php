@@ -23,7 +23,7 @@ Route::group(['prefix' => 'v1'], function () {
 
  Route::get('level', 'APILevel@index');
 
-
+ 
  /*
   |--------------------------------------------------------------------------
   | Questions API Routes
@@ -51,7 +51,21 @@ Route::group(['prefix' => 'v1'], function () {
   */
 
    Route::get('badge/index', 'APIBadge@index');
-   Route::get('badge/create', 'APIBadge@create');
+   Route::post('badge/create', 'APIBadge@create'); //
+   Route::post('badge/addplayerbadge', 'APIBadge@createPlayerBadge'); // adds badge for player, receives array of player_id and badge_id
+   Route::get('badge/player/{id}', 'APIBadge@playerbadges'); //return's the specified player badges
+
+    /*
+  |--------------------------------------------------------------------------
+  | Level API Routes
+  |--------------------------------------------------------------------------
+  |
+  */
+
+  Route::get('level/index', 'APILevel@index');
+  Route::post('level/create', 'APILevel@create'); //
+  Route::post('level/addplayerlevel', 'APILevel@updatePlayerLevel'); // updates player level
+  Route::get('level/player/{id}', 'APILevel@createPlayerLevel'); //return's the specified player badges
 
 
  /*
@@ -62,7 +76,7 @@ Route::group(['prefix' => 'v1'], function () {
   */
   Route::post('player/create', 'APIPlayer@create');
   Route::post('player/login', 'APIPlayer@login');
-  Route::get('player/{id}', 'APIPlayer@player');
+  Route::get('player/{id}', 'APIPlayer@player'); //get specified player info
 
 });
 

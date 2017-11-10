@@ -29,9 +29,9 @@ class QuestionsController extends Controller
 
          
          $data['questions'][] =  $question;
-         $data['category'][]   =  $question->category;
+         $data['category'][]   =  $question->category->subCategories;
          $data['level'][]     =  $question->level;
-       
+         
          
       }
 
@@ -48,7 +48,7 @@ class QuestionsController extends Controller
       return response()->json( ['status'=>'success',
          'code'=>200,
         'data'=>$data, 
-        // 'categories'=>$categories,'levels'=>$levels,
+       
         ]);
        
 

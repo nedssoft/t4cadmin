@@ -13,6 +13,7 @@ use App\Api\v1\APIPoint;
 
 Use App\Players;
 
+use App\Http\Controller\TokenizerController as TK;
 
 class APIPlayer
 {
@@ -33,6 +34,7 @@ class APIPlayer
 	  	$email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
 	  	$phone = filter_var($data['phone'], FILTER_SANITIZE_EMAIL);
         $password = Hash::make($data['password']);
+        $token = TKC::generate(); //generate token
         
 
             if(count(Players::where('email','=',$email)->first()) > 0){
@@ -50,6 +52,7 @@ class APIPlayer
                 $player->name = $name;
 				$player->username = $username;
 				$player->password = $password;
+				$player->token = $token;
 				$player->email = $email;
                 $player->phone = $phone;
                 
@@ -59,9 +62,9 @@ class APIPlayer
                      * SETUP PLAYER ACCOUNT
                     */
 
-                    $createBadgeData = ['player_id'=>$player->id, 'badge_id'=>'1'];
-                    $createLevelData = ['player_id'=>$player->id, 'level_id'=>'1'];
-                    $createPointData = ['player_id'=>$player->id, 'point'=>'0'];
+                    $createBadgeData = ['player_id'=>$player->id, 'badge_id'=>'1']; //add initial badge
+                    $createLevelData = ['player_id'=>$player->id, 'level_id'=>'1']; //add initial level
+                    $createPointData = ['player_id'=>$player->id, 'point'=>'0']; //add initial point
 
                    $addLevel = APILevel::createPlayerLevel($createLevelData);
                    $addBagde = APIBadge::createPlayerBadge($createBadgeData);

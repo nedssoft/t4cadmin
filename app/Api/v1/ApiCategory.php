@@ -123,7 +123,7 @@ class ApiCategory
      */
     public function update(Request $request, $id)
     {
-        $category = Article::findOrFail($id);
+        $category = Category::findOrFail($id);
         $category->update($request->all());
 
         if($category){
