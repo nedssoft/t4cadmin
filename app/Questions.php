@@ -23,5 +23,8 @@ class Questions extends Model
         return $this->belongsTo(Levels::class);
     }
 
+    public function subCategory(){
+        return $this->belongsToThrough('App\SubCategory', 'App\Category');
+    }
    
 }

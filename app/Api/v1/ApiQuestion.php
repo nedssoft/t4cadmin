@@ -7,7 +7,7 @@ use App\Levels;
 use App\Category;
 use App\Questions;
 
-class QuestionsController extends Controller
+class ApiQuestion 
 {
     /**
      * Display a listing of the resource.
@@ -54,7 +54,7 @@ class QuestionsController extends Controller
        
 
     */
-  
+        
     }
 
     /**
@@ -85,7 +85,7 @@ class QuestionsController extends Controller
         if ($question->save()){
             return response()->json([
                 'status'=>'success',
-                 'code'=>201, 
+                'code'=>201, 
                 'message'=>'question added successfully'
             ]);
         }
@@ -93,12 +93,12 @@ class QuestionsController extends Controller
         else{
             return response()->json([
                 'status'=>'error',
-                 'code'=>207, 
-                 'message'=>'Question not created, Something went wrong'
+                'code'=>207, 
+                'message'=>'Question not created, Something went wrong'
 
             ]);
         }
-       
+        
 
         /**
         *this part is to be used if the response is to be rendered to the view
@@ -122,19 +122,19 @@ class QuestionsController extends Controller
         //
         $q = Questions::find($id);
         
-       if (is_null($q) || ( (int)$q->status !==2 )){
+        if (is_null($q) || ( (int)$q->status !==2 )){
 
+            return response()->json([
+                'status'=>'Failed', 
+                'code'=>404,
+                'data'=>null, 
+                'message'=>'Resource Not Found']);
+        }
         return response()->json([
-            'status'=>'Failed', 
-             'code'=>404,
-             'data'=>null, 
-             'message'=>'Resource Not Found']);
-       }
-       return response()->json([
-        'status'=>'success', 
-        'code'=>200,
-        'data'=>$q, 
-    ]);
+            'status'=>'success', 
+            'code'=>200,
+            'data'=>$q, 
+        ]);
 
     }
 
@@ -147,15 +147,15 @@ class QuestionsController extends Controller
     public function edit($id)
     {
 
-         
-       $q = Questions::find($id);
-       $categories = Category::all();
-       $levels = Levels::all();
+       
+     $q = Questions::find($id);
+     $categories = Category::all();
+     $levels = Levels::all();
 
-       return view('question.edit-question', compact('q', 'categories', 'levels'));
+     return view('question.edit-question', compact('q', 'categories', 'levels'));
 
 
-    }
+ }
 
     /**
      * Update the specified resource in storage.
@@ -166,7 +166,7 @@ class QuestionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-       
+     
         $this->validate($request, $this->rules());
 
         if($question = Questions::find($id)->update($request->all())){
@@ -184,7 +184,7 @@ class QuestionsController extends Controller
                 'data' => null
             ])
         }
-           
+        
     }
 
     /**
@@ -197,12 +197,12 @@ class QuestionsController extends Controller
     {
         
         if ($delete = Questions::find($id)->delete()){
-        return response()->json([
-        'status'=>'success', 
-        'code'=>203, 
-        'data'=>'Question deleted'
-        ]);
-        
+            return response()->json([
+                'status'=>'success', 
+                'code'=>203, 
+                'data'=>'Question deleted'
+            ]);
+            
         }else{
             return response()->json([
                 'status' => 'error',
@@ -210,6 +210,7 @@ class QuestionsController extends Controller
                 'message' => 'Something went wrong, the question was not deleted',
             ])
         }
+    }
 
     public function rules()
     {
@@ -244,7 +245,7 @@ class QuestionsController extends Controller
                 'status'=>'success',
                 'code'=>203,
                 'message'=>'Question has been  approved by two admins!'
-       
+                
             ]);
         }
         
@@ -266,3 +267,4 @@ class QuestionsController extends Controller
 
     }
 }
+
