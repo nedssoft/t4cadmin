@@ -28,6 +28,6 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::routes();
         //to allow mobile app connect securely
-        Passport::enableImplicitGrant();
+        //Passport::enableImplicitGrant();
     }
 }

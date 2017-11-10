@@ -14,69 +14,69 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::group(['prefix' => 'v1'], function() {
+    /*
+    |--------------------------------------------------------------------------
+    | Routes outside the API auth guard but requires that the client
+    | requesting for resources within these routes be valid and trusted.
+    |--------------------------------------------------------------------------
+    |
+    */
+    Route::group(['middleware' => 'api-auth.client'], function() {
+      //Create a new user resource
+      Route::post('signup', 'APIAuth@signup');
+    });
 
-
-Route::group(['prefix' => 'v1'], function () {
-
- Route::get('level', 'APILevel@index');
-
- 
- /*
-  |--------------------------------------------------------------------------
-  | Questions API Routes
-  |--------------------------------------------------------------------------
-  |
-  */
-  Route::get('questions/{category_id}/{sib_category}', 'ApiQuestion@index');
-
-
-  /*
-  |--------------------------------------------------------------------------
-  | Categories API Routes
-  |--------------------------------------------------------------------------
-  |
-  */
-  Route::get('categories', 'ApiCategory@index');
-  Route::post('categories/store', 'ApiCategory@create');
-  Route::get('categories/{id}', 'ApiCategory@show');
-
- /*
-  |--------------------------------------------------------------------------
-  | Badges API Routes
-  |--------------------------------------------------------------------------
-  |
-  */
-
-   Route::get('badge/index', 'APIBadge@index');
-   Route::post('badge/create', 'APIBadge@create'); //
-   Route::post('badge/addplayerbadge', 'APIBadge@createPlayerBadge'); // adds badge for player, receives array of player_id and badge_id
-   Route::get('badge/player/{id}', 'APIBadge@playerbadges'); //return's the specified player badges
 
     /*
-  |--------------------------------------------------------------------------
-  | Level API Routes
-  |--------------------------------------------------------------------------
-  |
-  */
+    |--------------------------------------------------------------------------
+    | Protected API Routes
+    |--------------------------------------------------------------------------
+    |
+    */
+    Route::group(['middleware' => 'auth:api'], function() {
+      //Get the current user
+      Route::get('user', function (Request $request) {
+        return $request->user();
+      });
 
-  Route::get('level/index', 'APILevel@index');
-  Route::post('level/create', 'APILevel@create'); //
-  Route::post('level/addplayerlevel', 'APILevel@updatePlayerLevel'); // updates player level
-  Route::get('level/player/{id}', 'APILevel@createPlayerLevel'); //return's the specified player badges
+      Route::get('level', 'APILevel@index');
 
+      /*
+      |--------------------------------------------------------------------------
+      | Questions API Routes
+      |--------------------------------------------------------------------------
+      |
+      */
+      Route::get('questions/{category_id}/{sib_category}', 'ApiQuestion@index');
 
- /*
-  |--------------------------------------------------------------------------
-  | Player API Routes
-  |--------------------------------------------------------------------------
-  |
-  */
-  Route::post('player/create', 'APIPlayer@create');
-  Route::post('player/login', 'APIPlayer@login');
-  Route::get('player/{id}', 'APIPlayer@player'); //get specified player info
+      /*
+      |--------------------------------------------------------------------------
+      | Categories API Routes
+      |--------------------------------------------------------------------------
+      |
+      */
+      Route::get('categories', 'ApiCategory@index');
+      Route::post('categories/store', 'ApiCategory@create');
+      Route::get('categories/{id}', 'ApiCategory@show');
 
+      /*
+      |--------------------------------------------------------------------------
+      | Badges API Routes
+      |--------------------------------------------------------------------------
+      |
+      */
+      Route::get('badge/index', 'APIBadge@index');
+      Route::get('badge/create', 'APIBadge@create');
+
+      /*
+      |--------------------------------------------------------------------------
+      | Player API Routes
+      |--------------------------------------------------------------------------
+      |
+      */
+      Route::post('player/create', 'APIPlayer@create');
+      Route::post('player/login', 'APIPlayer@login');
+      Route::get('player/{id}', 'APIPlayer@player');
+    });
 });
-
