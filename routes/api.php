@@ -24,7 +24,7 @@ Route::group(['prefix' => 'v1'], function() {
     */
     Route::group(['middleware' => 'api-auth.client'], function() {
       //Create a new user resource
-      Route::post('signup', 'APIAuth@signup');
+      Route::post('signup', 'APIPlayer@create');
     });
 
 

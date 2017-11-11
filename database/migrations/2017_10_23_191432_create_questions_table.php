@@ -15,7 +15,7 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('categories_id')->unsigned();            
+            $table->integer('category_id')->unsigned();            
             $table->integer('level_id')->unsigned();
             $table->integer('point_id')->unsigned();        
             $table->text('question');
@@ -23,7 +23,7 @@ class CreateQuestionsTable extends Migration
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
             
-            $table->foreign('categories_id')
+            $table->foreign('category_id')
                   ->references('id')->on('categories')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
@@ -34,9 +34,9 @@ class CreateQuestionsTable extends Migration
                   ->onUpdate('cascade');
 
             $table->foreign('point_id')
-                ->references('id')->on('points')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                  ->references('id')->on('points')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
 
 }

@@ -12,6 +12,8 @@ class QuestionsTableSeeder extends Seeder
     public function run()
     {
         //
-        factory(App\Questions::class, 5)->create();
+        factory(App\Questions::class, 5)->create()->each(function ($question) {
+            $question->options()->saveMany(factory(App\Options::class, 4)->make());
+        });
     }
 }

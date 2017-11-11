@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PlayerPoint extends Model
 {
+    protected $table = 'player_points';
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -14,6 +16,11 @@ class PlayerPoint extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'player_id', 'point'
+        'player_id', 'total_points', 'earned_points'
     ];
+
+    public function player()
+    {
+        return $this->belongsTo('App\Players');
+    }
 }

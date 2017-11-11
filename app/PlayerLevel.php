@@ -21,4 +21,9 @@ class PlayerLevel extends Model
     protected $fillable = [
         'player_id', 'level_id'
     ];
+
+    public function player()
+    {
+        return $this->belongsTo('App\Players');
+    }
 }

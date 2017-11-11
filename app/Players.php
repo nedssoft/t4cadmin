@@ -15,25 +15,35 @@ class Players extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','phone','username', 'token'
+        'name', 'email', 'password','phone','username'
     ]; 
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['password'];
 
     //get player badges
 
-    public function badges(){
-    	return $this->hasMany(PlayerBadges::class);
+    public function badges() 
+    {
+    	return $this->hasMany(PlayerBadges::class, 'player_id');
     }
 
     //get player levels
 
-    public function level(){
-        return $this->hasOne(Levels::class);
+    public function level()
+    {
+        return $this->hasOne(Levels::class, 'player_id');
     }
     
     //get player points and money
 
-    public function point(){
-        return $this->hasOne(Points::class);
+    public function point()
+    {
+        return $this->hasOne(PlayerPoint::class, 'player_id');
     }
 
     /**

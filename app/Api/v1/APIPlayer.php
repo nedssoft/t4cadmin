@@ -2,104 +2,89 @@
 
 namespace App\Api\v1;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-
-use Response;
-
+use App\Players;
+use App\PlayerLevel;
+use App\PlayerBadges;
+use App\PlayerPoint;
 use App\Api\v1\APILevel;
 use App\Api\v1\APIBadge;
 use App\Api\v1\APIPoint;
-
-Use App\Players;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controller\TokenizerController as TK;
+use Response;
+use Validator;
+use DB;
 
 class APIPlayer
 {
     
-    //create new player
     /**
 	 * Create a New Player
 	 *
 	 * @param Array of Player details
 	 * @return JSON response success | error
 	 */
-  public static function create(Request $request)
-  {	  
-       $data = $request->all();
+    public static function create(Request $request)
+    {	  
+        //Validate the request
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:players',
+            'username' => 'required|string|max:255|unique:players',
+            'phone' => 'required|numeric|min:11',
+            'password' => 'required|string|min:6',
+        ]);
 
-	  	$name = filter_var($data['name'], FILTER_SANITIZE_STRING);		
-		$username = filter_var($data['username'], FILTER_SANITIZE_STRING);	
-	  	$email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
-	  	$phone = filter_var($data['phone'], FILTER_SANITIZE_EMAIL);
-        $password = Hash::make($data['password']);
-        $token = TKC::generate(); //generate token
-        
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 400,
+                'message' => $validator->errors(),
+                'data' => null
+            ], 400);
+        }
 
-            if(count(Players::where('email','=',$email)->first()) > 0){
+        //Validation passed, create resource
 
-                return response()->json([
-                    'status'=>'error',
-                    'code'=>504,
-                    'message'=>'player already exits',
-                    'data'=> null
-                ]);
+        //Begin transaction
+        DB::beginTransaction();
 
-            }else{
+        $player = new Players;
+        $player->name = $request->name;
+        $player->username = $request->username;
+        $player->email = $request->email;
+        $player->phone = $request->phone;
+        $player->password = bcrypt($request->password);
 
-                $player = new Players;	
-                $player->name = $name;
-				$player->username = $username;
-				$player->password = $password;
-				$player->token = $token;
-				$player->email = $email;
-                $player->phone = $phone;
-                
-                if($player->save()){
+        if ($player->save()) {
+            //Add initial badge
+            $player->badges()->save(new PlayerBadges(['badge_id' => 1]));
+            //Add initial level
+            $player->level()->save(new PlayerLevel(['level_id' => 1]));
+            //Add initial point
+            $player->point()->save(new PlayerPoint());
+            
+            //Commit
+            DB::commit();
 
-                    /** 
-                     * SETUP PLAYER ACCOUNT
-                    */
+            return response()->json([
+                'status' => 'success',
+                'code' => 201,
+                'message' => 'Player created',
+                'data' => $player->toArray()
+            ], 201);
+        }
 
-                    $createBadgeData = ['player_id'=>$player->id, 'badge_id'=>'1']; //add initial badge
-                    $createLevelData = ['player_id'=>$player->id, 'level_id'=>'1']; //add initial level
-                    $createPointData = ['player_id'=>$player->id, 'point'=>'0']; //add initial point
+        //Rollback transaction
+        DB::rollBack();
 
-                   $addLevel = APILevel::createPlayerLevel($createLevelData);
-                   $addBagde = APIBadge::createPlayerBadge($createBadgeData);
-                   $addPoint = APIPoint::UpdatePlayerPoint($createPointData);
-
-                   if(!$addLevel || !$addBagde || !$addPoint ){
-
-                    return response()->json([
-                        'status'=>'success',
-                        'code'=>201,
-                        'message'=>'player account created, but setup is not completed',
-                        'data'=> $player
-                    ]);
-
-                   }
-
-                    return response()->json([
-                        'status'=>'success',
-                        'code'=>201,
-                        'message'=>'player created',
-                        'data'=> $player
-                    ]);
-
-                }else{
-
-                    return response()->json([
-                        'status'=>'error',
-                        'code'=>500,
-                        'message'=>'player already exits',
-                        'data'=> null
-                    ]);
-
-                }
-            }	
-
+        return response()->json([
+            'status' => 'error',
+            'code' => 500,
+            'message' => 'Something went wrong, player was not created',
+            'data' => null
+        ], 500);
     }
     
     public static function login(Request $request)

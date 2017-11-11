@@ -7,11 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Questions extends Model
 {
     //
-    protected $fillable =
-    [ 'category_id', 'level_id', 
-        'question', 'option_1', 'option_2',
-        'option_3', 'option_4', 'answer','status'
-    ];
+    protected $fillable = ['category_id', 'level_id', 'point_id', 'question', 'answer','status'];
 
     public function category()
     {
@@ -23,8 +19,17 @@ class Questions extends Model
         return $this->belongsTo(Levels::class);
     }
 
-    public function subCategory(){
+    public function subCategory()
+    {
         return $this->belongsToThrough('App\SubCategory', 'App\Category');
     }
-   
+
+    /**
+     * Get the options for the question
+     *
+     */
+    public function options()
+    {
+        return $this->hasMany('App\Options', 'question_id');
+    }  
 }

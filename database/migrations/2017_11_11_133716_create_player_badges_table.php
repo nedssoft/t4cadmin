@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlayerPointsTable extends Migration
+class CreatePlayerBadgesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,15 @@ class CreatePlayerPointsTable extends Migration
      */
     public function up()
     {
-        Schema::create('player_points', function (Blueprint $table) {
+        Schema::create('player_badges', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('badge_id')->unsigned();
             $table->integer('player_id')->unsigned();
-            $table->integer('total_points')->default(0);
-            $table->integer('earned_points')->default(0);
+
+            $table->foreign('badge_id')
+                ->references('id')->on('badges')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table->foreign('player_id')
                 ->references('id')->on('players')
@@ -33,6 +37,6 @@ class CreatePlayerPointsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('player_points');
+        Schema::dropIfExists('player_badges');
     }
 }
