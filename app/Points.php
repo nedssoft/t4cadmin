@@ -14,6 +14,6 @@ class Points extends Model
      * @var array
      */
     protected $fillable = [
-        'player_id', 'value', 'amount'
+        'value', 'amount'
     ];
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlayer extends Migration
+class CreatePointsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,12 @@ class CreatePlayer extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('points', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('value');
+            $table->decimal('amount', 8, 2);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +28,6 @@ class CreatePlayer extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('points');
     }
 }

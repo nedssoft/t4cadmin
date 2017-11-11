@@ -15,7 +15,14 @@ class CreatePlayerPointsTable extends Migration
     {
         Schema::create('player_points', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->integer('player_id')->unsigned();
+            $table->integer('total_points');
+            $table->integer('earned_points');
+
+            $table->foreign('player_id')
+                ->references('id')->on('players')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

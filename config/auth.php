@@ -43,7 +43,7 @@ return [
 
         'api' => [
             'driver' => 'passport',
-            'provider' => 'users',
+            'provider' => 'players',
         ],
     ],
 
@@ -70,6 +70,11 @@ return [
             'model' => App\User::class,
         ],
 
+        'players' => [
+            'driver' => 'eloquent',
+            'model' => \App\Players::class,
+        ]
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -94,6 +99,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
+        'players' => [
+            'provider' => 'players',
             'table' => 'password_resets',
             'expire' => 60,
         ],

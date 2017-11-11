@@ -3,10 +3,11 @@
 namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Passport\HasApiTokens;
 
 class Players extends Model
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
     
      /**
      * The attributes that are mass assignable.
@@ -33,6 +34,21 @@ class Players extends Model
 
     public function point(){
         return $this->hasOne(Points::class);
+    }
+
+    /**
+     * Get API user entity
+     *
+     * @param string $username
+     * 
+     * @return this
+     */
+    public function findForPassport($username)
+    {
+        return $this->where(function ($query) use ($username) {
+            $query->where('username', $username)
+                    ->orWhere('email', $username);
+            })->first();
     }
 
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlayersTable extends Migration
+class CreatePlayerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,9 +17,8 @@ class CreatePlayersTable extends Migration
             $table->string('name')->nullable(); //player name, nullable because they can decide not to give us name
             $table->string('username'); // display name
             $table->string('phone')->nullable(); // display name
-            $table->string('email')->unique(); 
-            $table->string('password');                                
-            $table->string('token')->unique();                                
+            $table->string('email')->unique();
+            $table->string('password');
             $table->increments('id');
             $table->timestamps();
         });

@@ -14,10 +14,19 @@ class CreatePlayerLevelsTable extends Migration
     public function up()
     {
         Schema::create('player_levels', function (Blueprint $table) {
-            $table->string('player_id');                        
-            $table->string('level_id');                        
             $table->increments('id');
-            $table->timestamps();
+            $table->integer('player_id')->unsigned();
+            $table->integer('level_id')->unsigned();
+
+            $table->foreign('player_id')
+                  ->references('id')->on('players')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+
+            $table->foreign('level_id')
+                  ->references('id')->on('levels')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
         });
     }
 
