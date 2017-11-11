@@ -19,9 +19,9 @@ class Questions extends Model
         return $this->belongsTo(Levels::class);
     }
 
-    public function subCategory()
+    public function subcategories()
     {
-        return $this->belongsToThrough('App\SubCategory', 'App\Category');
+        return $this->hasManyThrough('App\SubCategory', 'App\Category', 'id', 'category_id');
     }
 
     /**
@@ -31,5 +31,14 @@ class Questions extends Model
     public function options()
     {
         return $this->hasMany('App\Options', 'question_id');
-    }  
+    }
+
+    /**
+     * Get the point for the question
+     *
+     */
+    public function point()
+    {
+        return $this->belongsTo('App\Points');
+    }
 }

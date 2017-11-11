@@ -48,6 +48,8 @@ Route::group(['prefix' => 'v1'], function() {
       |--------------------------------------------------------------------------
       |
       */
+      Route::get('questions', 'ApiQuestion@index');
+      Route::get('questions/random', 'ApiQuestion@randomQuestions');
       Route::get('questions/{category_id}/{sib_category}', 'ApiQuestion@index');
 
       /*
