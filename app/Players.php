@@ -2,10 +2,10 @@
 
 namespace App;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 
-class Players extends Model
+class Players extends Authenticatable
 {
     use Notifiable, HasApiTokens;
     
