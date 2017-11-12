@@ -37,7 +37,7 @@ Route::group(['prefix' => 'v1'], function() {
     Route::group(['middleware' => 'auth:api'], function() {
       //Get the current user
       Route::get('user', function (Request $request) {
-        return $request->user();
+        return $request->user()->load('profile');
       });
 
       Route::get('level', 'APILevel@index');

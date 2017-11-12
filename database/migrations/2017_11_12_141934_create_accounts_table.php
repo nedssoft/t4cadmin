@@ -18,7 +18,7 @@ class CreateAccountsTable extends Migration
             $table->integer('player_id')->unsigned();
             $table->string('bank');
             $table->string('account_number');
-            $table->string('account_type');
+            $table->string('account_type')->nullable();
             $table->timestamps();
 
             $table->foreign('player_id')

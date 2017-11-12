@@ -6,6 +6,7 @@ use App\Players;
 use App\PlayerLevel;
 use App\PlayerBadges;
 use App\PlayerPoint;
+use App\Profile;
 use App\Api\v1\APILevel;
 use App\Api\v1\APIBadge;
 use App\Api\v1\APIPoint;
@@ -18,7 +19,6 @@ use DB;
 
 class APIPlayer
 {
-    
     /**
 	 * Create a New Player
 	 *
@@ -64,6 +64,9 @@ class APIPlayer
             $player->level()->save(new PlayerLevel(['level_id' => 1]));
             //Add initial point
             $player->point()->save(new PlayerPoint());
+            if ($request->has('status')) {
+                $player->profile()->save(new Profile(['status' => $request->status]));
+            }
             
             //Commit
             DB::commit();
