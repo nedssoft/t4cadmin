@@ -47,6 +47,24 @@ class Players extends Authenticatable
     }
 
     /**
+     * Get the profile of the player
+     *
+     */
+    public function profile()
+    {
+        return $this->hasOne('App\Profile', 'player_id');
+    }
+
+    /**
+     * Get the accounts of the player
+     *
+     */
+    public function accounts()
+    {
+        return $this->hasMany('App\Account', 'player_id');
+    }
+
+    /**
      * Get API user entity
      *
      * @param string $username
