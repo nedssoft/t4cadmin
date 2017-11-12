@@ -2,46 +2,33 @@
 
 namespace App\Api\v1;
 
-use Illuminate\Http\Request;
 use App\Levels;
 use App\Category;
 use App\Questions;
 
 //Todo Cache API Requests for calls made by specific users
-class ApiQuestion 
+class ApiQuestion extends BaseAPIRequest
 {
     /**
      * Get all questions
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $questions = $this->questions()->get();
+        $questions = $this->getAllResource()->get();
 
         if ($questions) {
-            return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Questions retrieved successfully',
-                'data' => $questions
-            ], 200);
+            return $this->response('Questions retrieved successfully', 'success', 200, $questions);
         }
 
-        return response()->json([
-            'status' => 'error',
-            'code' => 500,
-            'message' => 'Something went wrong, questions could not be retrieved',
-            'data' => null
-        ], 500);
+        return $this->response('Questions could not be retrieved', 'error', 404);
     }
 
     /**
-     * Get questions
-     *
-     * @return Collection
+     * {@inheritdoc}
      */
-    public function questions()
+    public function getAllResource()
     {
         return Questions::with([
             'options', 
@@ -52,38 +39,83 @@ class ApiQuestion
     }
 
     /**
+     * {@inheritdoc}
+     */
+     public function getResourceByID($resourceID)
+     {
+         return Questions::find($resourceID);
+     }
+
+    /**
      * Get questions randomly
      *
      * @return \Illuminate\Http\Response
      */
-    public function randomQuestions(Request $request)
+    public function randomQuestions()
     {
-        $limit = $request->has('limit') ? intval($request->limit) : 'all';
+        $limit = $this->request->has('limit') ? intval($this->request->limit) : $this->limit;
         $questions = null;
 
         if ($limit === 'all' || $limit === 0) {
-            $questions = $this->questions()->inRandomOrder()->get();
+            $questions = $this->getAllResource()->inRandomOrder()->get();
         } else {
             if ($limit !== 0) {
-                $questions = $this->questions()->inRandomOrder()->take($limit)->get();
+                $questions = $this->getAllResource()->inRandomOrder()->take($limit)->get();
             }
         }
 
         if ($questions) {
-            return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Questions retrieved successfully',
-                'data' => $questions
-            ], 200);
+            return $this->response('Questions retrieved successfully', 'success', 200, $questions);
         }
 
-        return response()->json([
-            'status' => 'error',
-            'code' => 500,
-            'message' => 'Something went wrong, questions could not be retrieved',
-            'data' => null
-        ], 500);   
+        return $this->response('Questions could not be retrieved', 'error', 404);
+    }
+
+    /**
+     * Get a question by its ID
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function findByID($resourceID)
+    {
+        $question = $this->getResourceByID($resourceID);
+
+        if ($question) {
+            return $this->response('Question retrieved successfully', 'success', 200, $question);
+        }
+
+        return $this->response('Question could not be retrieved', 'error', 404);
+    }
+
+    /**
+     * Get questions under a given category
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function categoryQuestions($categoryID)
+    {
+        $questions = $this->getAllResource()->where('category_id', $categoryID)->get();
+
+        if ($questions) {
+            return $this->response('Questions retrieved successfully', 'success', 200, $questions);
+        }
+
+        return $this->response('Questions could not be retrieved', 'error', 404);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate()
+    {
+        $this->itemsPerPage = $this->request->has('items_per_page') ? intval($this->request->items_per_page) : $this->itemsPerPage;
+
+        $questions = $this->getAllResource()->paginate($this->itemsPerPage);
+
+        if ($questions) {
+            return $this->response('Questions retrieved successfully', 'success', 200, $questions);
+        }
+
+        return $this->response('Questions could not be retrieved', 'error', 404);
     }
 }
-

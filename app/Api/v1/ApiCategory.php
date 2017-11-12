@@ -2,174 +2,84 @@
 
 namespace App\Api\v1;
 
-use Illuminate\Http\Request;
- 
 use App\Category;
-
 use Reponse;
 
 
-class ApiCategory 
+class ApiCategory extends BaseAPIRequest
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     * 
-     */
-
-
-    public function index(){
-        //returns all categories
-
-        $category = Category::all();
-
-        if($category && !empty($category)){
-
-            return response()->json([
-                'status'=>'success',
-                'code'=>200,
-                'message'=>'All category fetched',
-                'data'=> $category
-            ]);
-
-        }else{
-
-            return response()->json([
-                'status'=>'error',
-                'code'=>404,
-                'message'=>'No Category Found',
-                'data'=> $category
-            ]);
-
-        }
-
-    }
-
-    /**
-     * Store a newly created resource in storage..
+     * Get all categories
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-
-        $this->validate($request, array(
-                        'name' => 'required',
-                        'description' => 'required',
-                        'imgUrl' => 'required'
-                    )
-                );
-
-        $name = $request['name'];
-        $description = $request['description'];
-        $imgUrl = $request['name'];
-
-        
-        $input = Category::create([
-            'name' => $name,
-            'description' => $description,
-            'imgUrl' => $imgUrl,
-        ]);
-        
-        Category::create($input);
-
-        if($input){
-            return response()->json([
-                'status' => 'success',
-                'code' => 201,
-                'message' => 'Category was created',
-                'data' => $input
-            ]);
-        }else{
-            return response()->json([
-                'status' => 'errir',
-                'code' => 504,
-                'message' => 'Something went wrong, category was not created',
-                'data' => inpull
-            ]);
-
-        }
-        
-    }
-    /*
-
-    Show a specified category
-
-
-
-    */
-
-    public function show($id)
-    {
-        $category = Category::findOrFail($id);
-        if ($category) {
-            return response()->json([
-                'status' => 'success',
-                'code' => 201,
-                'message' => 'Category Found',
-                'data' =>$category
-            ]);
-        }
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $cid
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $category = Category::findOrFail($id);
-        $category->update($request->all());
-
-        if($category){
-            return response()->json([
-                'status' => 'success',
-                'code' => 201,
-                'message' =>  'Category updated',
-                'data' => null
-            ]);
-        }else{
-            return response()->json9([
-                'status' =>'error',
-                'code' => 500,
-                'message' => 'Category not updated, Something went wrong',
-                'data' => null
-            ]);
-        }
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $cid
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $category = Category::findOrFail($id);
+     public function index()
+     {
+         $categories = $this->getAllResource()->get();
  
-        if($category->delete()){
-            return response()->json([
-                'status' => 'success',
-                'code' => 201,
-                'message' =>  'Category deleted',
-                'data' => $category
-            ]);
+         if ($categories) {
+             return $this->response('Categories retrieved successfully', 'success', 200, $categories);
+         }
+ 
+         return $this->response('Categories could not be retrieved', 'error', 404);
+     }
 
-        }else{
-            return response()->json([
-                'status' => 'error',
-                'code' => 500,
-                'message' => 'Category was not deleted, Something went wrong',
-                'data' => null
-            ]);
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllResource()
+    {
+        return Category::with(['subCategories']);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+     public function getResourceByID($resourceID)
+     {
+         return Category::find($resourceID);
+     }
+
+     /**
+     * Get a category by its ID
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function findByID($resourceID)
+    {
+        $category = $this->getResourceByID($resourceID);
+
+        if ($category) {
+            return $this->response('Category retrieved successfully', 'success', 200, $category);
+        }
+
+        return $this->response('Category could not be retrieved', 'error', 404);
+    }
+
+    public function subCategories($resourceID)
+    {
+        $subCategories = $this->getResourceByID($resourceID)->subCategories;
+        
+        if ($subCategories) {
+            return $this->response('Subcategories retrieved successfully', 'success', 200, $subCategories);
+        }
+
+        return $this->response('Subcategories could not be retrieved', 'error', 404);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate()
+    {
+        $this->itemsPerPage = $this->request->has('items_per_page') ? intval($this->request->items_per_page) : $this->itemsPerPage;
+
+        $categories = $this->getAllResource()->paginate($this->itemsPerPage);
+
+        if ($categories) {
+            return $this->response('Categories retrieved successfully', 'success', 200, $categories);
+        }
+
+        return $this->response('Categories could not be retrieved', 'error', 404);
+    }
 }

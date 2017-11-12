@@ -50,7 +50,11 @@ Route::group(['prefix' => 'v1'], function() {
       */
       Route::get('questions', 'ApiQuestion@index');
       Route::get('questions/random', 'ApiQuestion@randomQuestions');
-      Route::get('questions/{category_id}/{sib_category}', 'ApiQuestion@index');
+      Route::get('questions/paginate', 'ApiQuestion@paginate');
+      Route::get('questions/{question_id}', 'ApiQuestion@findByID')->where('question_id', '[0-9]+');
+      Route::get('questions/category/{category_id}', 'ApiQuestion@categoryQuestions')->where('category_id', '[0-9]+');
+      Route::get('questions/subcategory/{sub_categoryID}', 'APIQuestion@subcategoryQuestions')->where('sub_categoryID', '[0-9]+');
+      //Route::get('questions/{category_id}/{sib_category}', 'ApiQuestion@index');
 
       /*
       |--------------------------------------------------------------------------
@@ -59,8 +63,9 @@ Route::group(['prefix' => 'v1'], function() {
       |
       */
       Route::get('categories', 'ApiCategory@index');
-      Route::post('categories/store', 'ApiCategory@create');
-      Route::get('categories/{id}', 'ApiCategory@show');
+      Route::get('categories/paginate', 'ApiCategory@paginate');
+      Route::get('categories/{category_id}', 'ApiCategory@findByID')->where('category_id', '[0-9]+');
+      Route::get('categories/{category_id}/subcategories', 'ApiCategory@subCategories')->where('category_id', '[0-9]+');
 
       /*
       |--------------------------------------------------------------------------
