@@ -9,9 +9,9 @@ class Questions extends Model
     //
     protected $fillable = ['category_id', 'level_id', 'point_id', 'question', 'answer','status'];
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany('App\Category', 'question_categories', 'question_id', 'category_id');
     }
 
     public function level()
@@ -19,9 +19,9 @@ class Questions extends Model
         return $this->belongsTo(Levels::class);
     }
 
-    public function subcategories()
+    public function subCategories()
     {
-        return $this->hasManyThrough('App\SubCategory', 'App\Category', 'id', 'category_id');
+        return $this->belongsToMany('App\SubCategory', 'question_sub_categories', 'question_id', 'sub_category_id');
     }
 
     /**

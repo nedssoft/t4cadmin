@@ -18,7 +18,6 @@ class SubCategory extends Model
 
     public function questions()
     {
-    	return $this->hasManyThrough('App\Questions',
-    	 'App\Category');
+    	return $this->belongsToMany('App\Questions');
     }
 }

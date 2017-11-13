@@ -13,7 +13,7 @@ class Category extends Model
 
     public function questions()
     {
-    	return $this->hasMany(Questions::class);
+    	return $this->belongsToMany('App\Questions');
     }
 
     public function subCategories(){

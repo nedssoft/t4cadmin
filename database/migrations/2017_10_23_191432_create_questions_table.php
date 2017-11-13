@@ -14,19 +14,13 @@ class CreateQuestionsTable extends Migration
     public function up()
     {
         Schema::create('questions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('category_id')->unsigned();            
+            $table->increments('id');            
             $table->integer('level_id')->unsigned();
             $table->integer('point_id')->unsigned();        
             $table->text('question');
             $table->string('answer');
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
-            
-            $table->foreign('category_id')
-                  ->references('id')->on('categories')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
 
             $table->foreign('level_id')
                   ->references('id')->on('levels')
