@@ -4,6 +4,7 @@ namespace App\Api\v1;
 
 use App\Levels;
 use App\Category;
+use App\SubCategory;
 use App\Questions;
 
 //Todo Cache API Requests for calls made by specific users
@@ -92,9 +93,9 @@ class ApiQuestion extends BaseAPIRequest
      *
      * @return \Illuminate\Http\Response
      */
-    public function categoryQuestions($categoryID)
+    public function categoryQuestions(ApiCategory $apiCategory, $categoryID)
     {
-        $questions = $this->getAllResource()->where('category_id', $categoryID)->get();
+        $questions = $apiCategory->getResourceByID($categoryID)->questions;
 
         if ($questions) {
             return $this->response('Questions retrieved successfully', 'success', 200, $questions);
@@ -102,6 +103,22 @@ class ApiQuestion extends BaseAPIRequest
 
         return $this->response('Questions could not be retrieved', 'error', 404);
     }
+
+    /**
+     * Get questions under a given sub category
+     *
+     * @return \Illuminate\Http\Response
+     */
+     public function subCategoryQuestions($subCategoryID)
+     {
+         $questions = SubCategory::find($subCategoryID)->questions;
+ 
+         if ($questions) {
+             return $this->response('Questions retrieved successfully', 'success', 200, $questions);
+         }
+ 
+         return $this->response('Questions could not be retrieved', 'error', 404);
+     }
 
     /**
      * {@inheritdoc}

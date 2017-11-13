@@ -13,7 +13,7 @@ class Category extends Model
 
     public function questions()
     {
-    	return $this->belongsToMany('App\Questions');
+    	return $this->belongsToMany('App\Questions', 'question_categories', 'category_id', 'question_id');
     }
 
     public function subCategories()

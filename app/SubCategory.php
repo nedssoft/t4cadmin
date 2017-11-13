@@ -18,6 +18,6 @@ class SubCategory extends Model
 
     public function questions()
     {
-    	return $this->belongsToMany('App\Questions');
+    	return $this->belongsToMany('App\Questions', 'question_sub_categories', 'sub_category_id', 'question_id');
     }
 }

@@ -3,8 +3,6 @@
 namespace App\Api\v1;
 
 use App\Category;
-use Reponse;
-
 
 class ApiCategory extends BaseAPIRequest
 {
@@ -43,6 +41,8 @@ class ApiCategory extends BaseAPIRequest
      /**
      * Get a category by its ID
      *
+     * @param int $resourceID
+     *
      * @return \Illuminate\Http\Response
      */
     public function findByID($resourceID)
@@ -56,6 +56,13 @@ class ApiCategory extends BaseAPIRequest
         return $this->response('Category could not be retrieved', 'error', 404);
     }
 
+    /**
+     * Get all subcategories of a category
+     *
+     * @param int $resourceID
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function subCategories($resourceID)
     {
         $subCategories = $this->getResourceByID($resourceID)->subCategories;

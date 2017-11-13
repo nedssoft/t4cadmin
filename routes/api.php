@@ -53,7 +53,7 @@ Route::group(['prefix' => 'v1'], function() {
       Route::get('questions/paginate', 'ApiQuestion@paginate');
       Route::get('questions/{question_id}', 'ApiQuestion@findByID')->where('question_id', '[0-9]+');
       Route::get('questions/category/{category_id}', 'ApiQuestion@categoryQuestions')->where('category_id', '[0-9]+');
-      Route::get('questions/subcategory/{sub_categoryID}', 'APIQuestion@subcategoryQuestions')->where('sub_categoryID', '[0-9]+');
+      Route::get('questions/subcategory/{sub_categoryID}', 'ApiQuestion@subCategoryQuestions')->where('sub_categoryID', '[0-9]+');
       //Route::get('questions/{category_id}/{sib_category}', 'ApiQuestion@index');
 
       /*
@@ -85,5 +85,13 @@ Route::group(['prefix' => 'v1'], function() {
       Route::post('player/create', 'APIPlayer@create');
       Route::post('player/login', 'APIPlayer@login');
       Route::get('player/{id}', 'APIPlayer@player');
+
+      /*
+      |--------------------------------------------------------------------------
+      | Settings API Routes
+      |--------------------------------------------------------------------------
+      |
+      */
+      Route::get('settings/category/{category_id}', 'APISettings@categorySettings')->where('category_id', '[0-9]+');
     });
 });
