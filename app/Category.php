@@ -16,8 +16,9 @@ class Category extends Model
     	return $this->belongsToMany('App\Questions');
     }
 
-    public function subCategories(){
+    public function subCategories()
+    {
 
-    	return $this->hasMany(SubCategory::class);
+    	return $this->hasMany('App\SubCategory');
     }
 }
