@@ -24,7 +24,7 @@ Route::group(['prefix' => 'v1'], function() {
     */
     Route::group(['middleware' => 'api-auth.client'], function() {
       //Create a new user resource
-      Route::post('player/create', 'APIPlayer@create');
+      Route::post('players', 'APIPlayer@create');
     });
 
 
@@ -76,7 +76,7 @@ Route::group(['prefix' => 'v1'], function() {
       Route::get('badges', 'APIBadge@index');
       Route::get('badges/paginate', 'ApiCategory@paginate');
       Route::get('badges/{badge_id}', 'APIBadge@findByID')->where('badge_id', '[0-9]+');
-      Route::get('badge/create', 'APIBadge@create');
+      //Route::get('badges/create', 'APIBadge@create');
 
       /*
       |--------------------------------------------------------------------------
@@ -84,10 +84,14 @@ Route::group(['prefix' => 'v1'], function() {
       |--------------------------------------------------------------------------
       |
       */
-      Route::post('player/login', 'APIPlayer@login');
-      Route::get('player/{id}', 'APIPlayer@player')->where('id', '[0-9]+');
-      Route::get('player/badges', 'APIPlayer@badges');
-      Route::post('player/badges/create/{badge_id}', 'APIPlayer@createPlayerBadge');
+      //Route::get('players', 'APIPlayer@index');
+      //Route::post('players/login', 'APIPlayer@login');
+      Route::post('players/{player_id}', 'APIPlayer@update')->where('player_id', '[0-9]+');
+      Route::delete('players/{player_id}', 'APIPlayer@delete')->where('player_id', '[0-9]+');
+      Route::get('players/{player_id}', 'APIPlayer@findByID')->where('player_id', '[0-9]+');
+      Route::get('players/badges', 'APIPlayer@badges');
+      Route::post('players/badges/{badge_id}/create', 'APIPlayer@createPlayerBadge')->where('badge_id', '[0-9]+');
+      Route::delete('players/badges/{badge_id}/delete', 'APIPlayer@removePlayerBadge')->where('badge_id', '[0-9]+');
 
       /*
       |--------------------------------------------------------------------------

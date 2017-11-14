@@ -2,14 +2,9 @@
 
 namespace App\Api\v1;
 
-use Illuminate\Http\Request;
-use Response;
-
 use App\PlayerPoints;
 
-
-
-class APIPoint 
+class APIPoint extends BaseAPIRequest
 {
     
     public function index(){        
@@ -119,4 +114,28 @@ class APIPoint
                
         
             }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResourceByID($resourceID)
+    {
+        //
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    public function getAllResource()
+    {
+        //
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    public function paginate()
+    {
+        //
+    }
 }
