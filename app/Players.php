@@ -29,7 +29,19 @@ class Players extends Authenticatable
 
     public function badges() 
     {
-    	return $this->hasMany(PlayerBadges::class, 'player_id');
+    	return $this->belongsToMany('App\Badges', 'player_badges', 'player_id', 'badge_id');
+    }
+
+    /**
+     * Check if the player has a given badge
+     *
+     * @param int $badgeID 
+     *
+     * @return bool
+     */
+    public function hasBadge($badgeID)
+    {
+        return $this->badges->contains('id', $badgeID);
     }
 
     //get player levels

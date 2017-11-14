@@ -24,7 +24,7 @@ Route::group(['prefix' => 'v1'], function() {
     */
     Route::group(['middleware' => 'api-auth.client'], function() {
       //Create a new user resource
-      Route::post('signup', 'APIPlayer@create');
+      Route::post('player/create', 'APIPlayer@create');
     });
 
 
@@ -73,7 +73,9 @@ Route::group(['prefix' => 'v1'], function() {
       |--------------------------------------------------------------------------
       |
       */
-      Route::get('badge/index', 'APIBadge@index');
+      Route::get('badges', 'APIBadge@index');
+      Route::get('badges/paginate', 'ApiCategory@paginate');
+      Route::get('badges/{badge_id}', 'APIBadge@findByID')->where('badge_id', '[0-9]+');
       Route::get('badge/create', 'APIBadge@create');
 
       /*
@@ -82,9 +84,10 @@ Route::group(['prefix' => 'v1'], function() {
       |--------------------------------------------------------------------------
       |
       */
-      Route::post('player/create', 'APIPlayer@create');
       Route::post('player/login', 'APIPlayer@login');
-      Route::get('player/{id}', 'APIPlayer@player');
+      Route::get('player/{id}', 'APIPlayer@player')->where('id', '[0-9]+');
+      Route::get('player/badges', 'APIPlayer@badges');
+      Route::post('player/badges/create/{badge_id}', 'APIPlayer@createPlayerBadge');
 
       /*
       |--------------------------------------------------------------------------

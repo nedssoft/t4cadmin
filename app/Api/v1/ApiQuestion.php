@@ -42,10 +42,10 @@ class ApiQuestion extends BaseAPIRequest
     /**
      * {@inheritdoc}
      */
-     public function getResourceByID($resourceID)
-     {
-         return Questions::find($resourceID);
-     }
+    public function getResourceByID($resourceID)
+    {
+        return Questions::find($resourceID);
+    }
 
     /**
      * Get questions randomly

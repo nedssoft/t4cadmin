@@ -22,8 +22,9 @@ class APIPlayer
     /**
 	 * Create a New Player
 	 *
-	 * @param Array of Player details
-	 * @return JSON response success | error
+     * @param Request $request
+     *
+	 * @return Response
 	 */
     public static function create(Request $request)
     {	  
@@ -88,6 +89,76 @@ class APIPlayer
             'message' => 'Something went wrong, player was not created',
             'data' => null
         ], 500);
+    }
+
+    /**
+	 * Adds a new badge to a player's badge collection
+     *
+     * @param APIBadge $apiBadge
+     * @param Request $request
+     * @param int $badgeID
+     *
+	 * @return Response
+     */
+    public function createPlayerBadge(APIBadge $apiBadge, Request $request, $badgeID)
+    {
+        $badge = $apiBadge->getResourceByID($badgeID);
+
+        if ($badge) {
+            //Check if the player already has this badge
+            if (! $request->user()->hasBadge($badgeID)) {
+                $request->user()->badges()->attach($badgeID);
+
+                return response()->json([
+                    'status' => 'success',
+                    'code' => 201,
+                    'message' => 'Player badge created',
+                    'data' => $badge
+                ], 201);
+            }
+
+            return response()->json([
+                'status' => 'error',
+                'code' => 409,
+                'message' => 'Player badge already exists',
+                'data' => null
+            ], 409);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Badge does not exist',
+                'data' => null
+            ], 404);
+        }
+    }
+
+    /**
+	 * Gets the collection of player's badges
+     *
+     * @param Request $request
+     *
+	 * @return Response
+     */
+    public function badges(Request $request)
+    {
+        $badges = $request->user()->badges;
+
+        if ($badges) {
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Player badges retrieved successfully',
+                'data' => $badges
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'code' => 404,
+            'message' => 'Badge does not exist',
+            'data' => null
+        ], 404);
     }
     
     public static function login(Request $request)

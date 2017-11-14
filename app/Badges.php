@@ -15,4 +15,13 @@ class Badges extends Model
     protected $fillable = [
         'name', 'icon', 'points','description'
     ];
+
+    /**
+	 * Gets the players who has achived this badge
+     *
+     */
+    public function players()
+    {
+        return $this->belongsToMany('App\Players', 'player_badges', 'badge_id', 'player_id');
+    }
 }
