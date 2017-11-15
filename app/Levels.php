@@ -19,9 +19,15 @@ class Levels extends Model
 
     public function questions()
     {
-
         return $this->hasMany(Questions::class);
     }
 
-
+    /**
+     * Get the players who has this level
+     *
+     */
+    public function players()
+    {
+        return $this->belongsToMany('App\Players', 'player_levels', 'level_id', 'player_id');
+    }
 }

@@ -18,6 +18,7 @@ class CreateLevelsTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('icon')->nullable();
+            $table->integer('target');
             $table->timestamps();
         });
     }

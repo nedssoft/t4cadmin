@@ -19,6 +19,23 @@ use DB;
 
 class APIPlayer extends BaseAPIRequest
 {
+
+    /**
+     * Get all players
+     *
+     * @return \Illuminate\Http\Response
+     */
+     public function index()
+     {
+         $players = $this->getAllResource()->orderBy('created_at')->get();
+ 
+         if ($players) {
+             return $this->response('Players retrieved successfully', 'success', 200, $players);
+         }
+ 
+         return $this->response('Players could not be retrieved', 'error', 404);
+     }
+
     /**
 	 * Create a New Player
 	 *
@@ -57,7 +74,7 @@ class APIPlayer extends BaseAPIRequest
             //Add initial badge
             $player->badges()->attach(1);
             //Add initial level
-            //$player->level()->save(new PlayerLevel(['level_id' => 1]));
+            $player->levels()->attach(1);
             //Add initial point
             $player->point()->save(new PlayerPoint());
             if ($this->request->has('status')) {
@@ -84,22 +101,28 @@ class APIPlayer extends BaseAPIRequest
      *
 	 * @return Response
      */
-    public function createPlayerBadge(APIBadge $apiBadge, $badgeID)
+    public function createPlayerBadge(APIBadge $apiBadge, $playerID, $badgeID)
     {
-        $badge = $apiBadge->getResourceByID($badgeID);
+        $player = $this->getResourceByID($playerID);
 
-        if ($badge) {
-            //Check if the player already has this badge
-            if (! $this->request->user()->hasBadge($badgeID)) {
-                $this->request->user()->badges()->attach($badgeID);
-
-                return $this->response('Player badge created', 'success', 201, $badge);
+        if ($player) {
+            $badge = $apiBadge->getResourceByID($badgeID);
+            
+            if ($badge) {
+                //Check if the player already has this badge
+                if (! $this->request->user()->hasBadge($badgeID)) {
+                    $this->request->user()->badges()->attach($badgeID);
+    
+                    return $this->response('Player badge created', 'success', 201, $badge);
+                }
+    
+                return $this->response('Player badge already exists', 'error', 409);
             }
-
-            return $this->response('Player badge already exists', 'error', 409);
+    
+            return $this->response('Badge does not exist', 'error', 404);
         }
 
-        return $this->response('Badge does not exist', 'error', 404);
+        return $this->response('Player does not exist', 'error', 404);
     }
 
     /**
@@ -135,15 +158,21 @@ class APIPlayer extends BaseAPIRequest
      *
 	 * @return Response
      */
-    public function badges()
+    public function badges($playerID)
     {
-        $badges = $this->request->user()->badges;
-
-        if ($badges) {
-            return $this->response('Player badges retrieved successfully', 'success', 200, $badges);
+        $player = $this->getResourceByID($playerID);
+        
+        if ($player) {
+            $badges = $this->request->user()->badges;
+            
+            if ($badges) {
+                return $this->response('Player badges retrieved successfully', 'success', 200, $badges);
+            }
+    
+            return $this->response('Badge does not exist', 'error', 404);
         }
 
-        return $this->response('Badge does not exist', 'error', 404);
+        return $this->response('Player does not exist', 'error', 404);
     }
 
     /**
@@ -158,7 +187,7 @@ class APIPlayer extends BaseAPIRequest
         $player = $this->getResourceByID($playerID);
         
         if ($player) {
-            return $this->response('Player retrieved successfully', 'success', 200, $player);
+            return $this->response('Player retrieved successfully', 'success', 200, $player->load('profile'));
         }
 
         return $this->response('Player could not be retrieved', 'error', 404);
@@ -220,7 +249,7 @@ class APIPlayer extends BaseAPIRequest
     */
     public function getAllResource()
     {
-        //
+        return Players::with(['profile']);
     }
 
     /**
@@ -228,6 +257,14 @@ class APIPlayer extends BaseAPIRequest
     */
     public function paginate()
     {
-        //
+        $this->itemsPerPage = $this->request->has('items_per_page') ? intval($this->request->items_per_page) : $this->itemsPerPage;
+        
+        $players = $this->getAllResource()->paginate($this->itemsPerPage);
+
+        if ($players) {
+            return $this->response('Players retrieved successfully', 'success', 200, $players);
+        }
+
+        return $this->response('Players could not be retrieved', 'error', 404);
     }
 }

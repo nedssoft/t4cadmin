@@ -46,9 +46,9 @@ class Players extends Authenticatable
 
     //get player levels
 
-    public function level()
+    public function levels()
     {
-        return $this->hasOne(Levels::class, 'player_id');
+        return $this->belongsToMany('App\Levels', 'player_levels', 'player_id', 'level_id');
     }
     
     //get player points and money

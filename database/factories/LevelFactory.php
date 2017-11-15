@@ -10,5 +10,6 @@ $factory->define(App\Levels::class, function (Faker $faker) {
         //
        'name'=>$faker->randomElement($level),
        'description'=>$faker->sentence,
+       'target' => $faker->randomDigitNotNull()
     ];
 });

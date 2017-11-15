@@ -49,7 +49,6 @@ Route::group(['prefix' => 'v1'], function() {
       |
       */
       Route::get('questions', 'ApiQuestion@index');
-      Route::get('questions/random', 'ApiQuestion@randomQuestions');
       Route::get('questions/paginate', 'ApiQuestion@paginate');
       Route::get('questions/{question_id}', 'ApiQuestion@findByID')->where('question_id', '[0-9]+');
       Route::get('questions/category/{category_id}', 'ApiQuestion@categoryQuestions')->where('category_id', '[0-9]+');
@@ -84,14 +83,15 @@ Route::group(['prefix' => 'v1'], function() {
       |--------------------------------------------------------------------------
       |
       */
-      //Route::get('players', 'APIPlayer@index');
+      Route::get('players', 'APIPlayer@index');
+      Route::get('players/paginate', 'APIPlayer@paginate');
       //Route::post('players/login', 'APIPlayer@login');
       Route::post('players/{player_id}', 'APIPlayer@update')->where('player_id', '[0-9]+');
       Route::delete('players/{player_id}', 'APIPlayer@delete')->where('player_id', '[0-9]+');
       Route::get('players/{player_id}', 'APIPlayer@findByID')->where('player_id', '[0-9]+');
-      Route::get('players/badges', 'APIPlayer@badges');
-      Route::post('players/badges/{badge_id}/create', 'APIPlayer@createPlayerBadge')->where('badge_id', '[0-9]+');
-      Route::delete('players/badges/{badge_id}/delete', 'APIPlayer@removePlayerBadge')->where('badge_id', '[0-9]+');
+      Route::get('players/{player_id}/badges', 'APIPlayer@badges')->where('player_id', '[0-9]+');
+      Route::post('players/{player_id}/badges/{badge_id}/create', 'APIPlayer@createPlayerBadge')->where(['badge_id' => '[0-9]+', 'badge_id' => '[0-9]+']);
+      Route::delete('players/{player_id}/badges/{badge_id}/delete', 'APIPlayer@removePlayerBadge')->where(['badge_id' => '[0-9]+', 'badge_id' => '[0-9]+']);
 
       /*
       |--------------------------------------------------------------------------

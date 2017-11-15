@@ -17,6 +17,11 @@ class ApiQuestion extends BaseAPIRequest
      */
     public function index()
     {
+        if ($this->request->offsetExists('order')
+            && strtolower($this->request->order) === 'random') {
+            return $this->randomQuestions();
+        }
+
         $questions = $this->getAllResource()->get();
 
         if ($questions) {
@@ -33,10 +38,10 @@ class ApiQuestion extends BaseAPIRequest
     {
         return Questions::with([
             'options', 
-            'category',
+            'categories',
             'level',
             'point'
-        ]);       
+        ]);
     }
 
     /**
@@ -82,7 +87,7 @@ class ApiQuestion extends BaseAPIRequest
         $question = $this->getResourceByID($resourceID);
 
         if ($question) {
-            return $this->response('Question retrieved successfully', 'success', 200, $question);
+            return $this->response('Question retrieved successfully', 'success', 200, $question->load(['options', 'categories', 'level', 'point']));
         }
 
         return $this->response('Question could not be retrieved', 'error', 404);
