@@ -13,8 +13,16 @@ class APIBadge extends BaseAPIRequest
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {    
-        $badges = $this->getAllResource();
+    {   
+        $limit = $this->request->has('limit') ? intval($this->request->limit) : $this->limit;
+
+        if ($limit === 'all' || $limit === 0) {
+            $badges = $this->getAllResource()->get();
+        } else {
+            if ($limit !== 0) {
+                $badges = $this->getAllResource()->take($limit)->get();
+            }
+        }
         
         if ($badges) {
             return $this->response('Badges retrieved successfully', 'success', 200, $badges);
@@ -115,11 +123,35 @@ class APIBadge extends BaseAPIRequest
     }
 
     /**
+     * Get all players with a specified badge
+     *
+     * @param int $badgeID
+     *
+     * @return Response
+     */
+     public function badgePlayers($badgeID)
+     {
+         $badge = $this->getResourceByID($badgeID);
+ 
+         if ($badge) {
+             $players = $badge->players->load('point');
+             
+             if ($players) {
+                 return $this->response('Players retrieved successfully', 'success', 200, $players);
+             }
+ 
+             return $this->response('Players could not be retrieved', 'error', 404);
+         }
+ 
+         return $this->response('Badge does not exist', 'error', 404);
+     }
+
+    /**
      * {@inheritdoc}
      */
     public function getAllResource()
     {
-        return Badges::all();
+        return Badges::query();
     }
  
      /**

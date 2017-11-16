@@ -26,13 +26,16 @@ class APILevel extends BaseAPIRequest
     /**
      * Get all players in a specified level
      *
+     * @param int $levelID
+     *
+     * @return Response
      */
     public function levelPlayers($levelID)
     {
         $level = $this->getResourceByID($levelID);
 
         if ($level) {
-            $players = $level->players->load('point', 'badges', 'profile');
+            $players = $level->players->load('point');
             
             if ($players) {
                 return $this->response('Players retrieved successfully', 'success', 200, $players);
@@ -52,7 +55,7 @@ class APILevel extends BaseAPIRequest
      *
 	 * @return Response
      */
-    public function levels(APIPlayer $apiPlayer, $playerID)
+    public function playerLevels(APIPlayer $apiPlayer, $playerID)
     {
         $player = $apiPlayer->getResourceByID($playerID);
         
