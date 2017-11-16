@@ -87,7 +87,7 @@ class APILevel extends BaseAPIRequest
 
             if ($level) {
                 if (! $player->hasLevel($levelID)) {
-                    $player->levels()->attach($badgeID);
+                    $player->levels()->attach($levelID);
                     
                     return $this->response('Player level created', 'success', 201, $level);
                 }
@@ -110,7 +110,7 @@ class APILevel extends BaseAPIRequest
      *
 	 * @return Response
      */
-    public function removePlayerLevel(APIPlayer $apiPlayer, $playerID, $badgeID)
+    public function removePlayerLevel(APIPlayer $apiPlayer, $playerID, $levelID)
     {
         $player = $apiPlayer->getResourceByID($playerID);
 

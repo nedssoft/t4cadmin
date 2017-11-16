@@ -57,14 +57,19 @@ class APIPoint extends BaseAPIRequest
         if ($player) {
             $playerPoints = $player->point;
 
-            $playerPoints->total_points += $this->request->points;
-            $playerPoints->earaned_points += $this->request->points;
-            
-            if ($playerPoints->save()) {
-                return $this->response('Points updated successfully', 'success', 200, $playerPoints);
+            if ($this->request->offsetExists('points')
+                && ! is_null($this->request->points)) {
+                $playerPoints->total_points += $this->request->points;
+                $playerPoints->earned_points += $this->request->points;
+                
+                if ($playerPoints->save()) {
+                    return $this->response('Points updated successfully', 'success', 200, $playerPoints);
+                }
+    
+                return $this->response('Something went wrong, points were not updated', 'error', 500);
             }
 
-            return $this->response('Something went wrong, points were not updated', 'error', 500);
+            return $this->response('Missing parameter - points', 'error', 400);
         }
 
         return $this->response('Player does not exist', 'error', 404);
