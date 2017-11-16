@@ -37,10 +37,8 @@ Route::group(['prefix' => 'v1'], function() {
     Route::group(['middleware' => 'auth:api'], function() {
       //Get the current user
       Route::get('user', function (Request $request) {
-        return $request->user()->load('profile');
+        return $request->user()->load('profile', 'point', 'badges', 'levels');
       });
-
-      Route::get('level', 'APILevel@index');
 
       /*
       |--------------------------------------------------------------------------
@@ -65,6 +63,7 @@ Route::group(['prefix' => 'v1'], function() {
       Route::get('categories/paginate', 'ApiCategory@paginate');
       Route::get('categories/{category_id}', 'ApiCategory@findByID')->where('category_id', '[0-9]+');
       Route::get('categories/{category_id}/subcategories', 'ApiCategory@subCategories')->where('category_id', '[0-9]+');
+      Route::get('categories/subcategory/{sub_categoryID}', 'ApiCategory@subCategory')->where('sub_categoryID', '[0-9]+');
 
       /*
       |--------------------------------------------------------------------------
@@ -89,9 +88,35 @@ Route::group(['prefix' => 'v1'], function() {
       Route::post('players/{player_id}', 'APIPlayer@update')->where('player_id', '[0-9]+');
       Route::delete('players/{player_id}', 'APIPlayer@delete')->where('player_id', '[0-9]+');
       Route::get('players/{player_id}', 'APIPlayer@findByID')->where('player_id', '[0-9]+');
-      Route::get('players/{player_id}/badges', 'APIPlayer@badges')->where('player_id', '[0-9]+');
-      Route::post('players/{player_id}/badges/{badge_id}/create', 'APIPlayer@createPlayerBadge')->where(['badge_id' => '[0-9]+', 'badge_id' => '[0-9]+']);
-      Route::delete('players/{player_id}/badges/{badge_id}/delete', 'APIPlayer@removePlayerBadge')->where(['badge_id' => '[0-9]+', 'badge_id' => '[0-9]+']);
+      Route::get('players/{player_id}/badges', 'APIBadge@playerBadges')->where('player_id', '[0-9]+');
+      Route::post('players/{player_id}/badges/{badge_id}', 'APIBadge@createPlayerBadge')->where(['player_id' => '[0-9]+', 'badge_id' => '[0-9]+']);
+      Route::delete('players/{player_id}/badges/{badge_id}', 'APIBadge@removePlayerBadge')->where(['player_id' => '[0-9]+', 'badge_id' => '[0-9]+']);
+      Route::get('players/{player_id}/levels', 'APILevel@levels')->where('player_id', '[0-9]+');
+      Route::post('players/{player_id}/levels/{level_id}', 'APILevel@createPlayerLevel')->where(['player_id' => '[0-9]+', 'level_id' => '[0-9]+']);
+      Route::delete('players/{player_id}/levels/{level_id}', 'APILevel@removePlayerLevel')->where(['player_id' => '[0-9]+', 'level_id' => '[0-9]+']);
+      Route::get('players/{player_id}/points', 'APIPoint@playerPoints')->where('player_id', '[0-9]+');
+      Route::post('players/{player_id}/points', 'APIPoint@updatePlayerPoints')->where('player_id', '[0-9]+');
+
+      /*
+      |--------------------------------------------------------------------------
+      | Level API Routes
+      |--------------------------------------------------------------------------
+      |
+      */
+      Route::get('levels', 'APILevel@index');
+      Route::get('levels/paginate', 'APILevel@paginate');
+      Route::get('levels/{level_id}', 'APILevel@findByID')->where('level_id', '[0-9]+');
+      Route::get('levels/{level_id}/players', 'APILevel@levelPlayers')->where('level_id', '[0-9]+');
+
+      /*
+      |--------------------------------------------------------------------------
+      | Points API Routes
+      |--------------------------------------------------------------------------
+      |
+      */
+      Route::get('points', 'APIPoint@index');
+      Route::get('points/paginate', 'APIPoint@paginate');
+      Route::get('points/{point_id}', 'APIPoint@findByID')->where('point_id', '[0-9]+');
 
       /*
       |--------------------------------------------------------------------------

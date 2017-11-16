@@ -90,7 +90,7 @@ class ApiQuestion extends BaseAPIRequest
             return $this->response('Question retrieved successfully', 'success', 200, $question->load(['options', 'categories', 'level', 'point']));
         }
 
-        return $this->response('Question could not be retrieved', 'error', 404);
+        return $this->response('Question does not exist', 'error', 404);
     }
 
     /**
@@ -100,13 +100,44 @@ class ApiQuestion extends BaseAPIRequest
      */
     public function categoryQuestions(ApiCategory $apiCategory, $categoryID)
     {
-        $questions = $apiCategory->getResourceByID($categoryID)->questions;
+        $category = $apiCategory->getResourceByID($categoryID);
 
-        if ($questions) {
-            return $this->response('Questions retrieved successfully', 'success', 200, $questions);
+        if ($category) {
+            $limit = $this->request->has('limit') ? intval($this->request->limit) : $this->limit;
+
+            if ($this->request->offsetExists('order')
+            && strtolower($this->request->order) === 'random') {
+                if ($limit === 'all' || $limit === 0) {
+                    $questions = $category->questions()
+                                          ->with(['options', 'point', 'level'])
+                                          ->inRandomOrder()->get();
+                } else {
+                    if ($limit !== 0) {
+                        $questions = $category->questions()
+                                              ->with(['options', 'point', 'level'])
+                                              ->take($limit)
+                                              ->inRandomOrder()
+                                              ->get();
+                    }
+                }
+            } else {
+                if ($limit === 'all' || $limit === 0) {
+                    $questions = $category->questions->load(['options', 'point', 'level']);
+                } else {
+                    if ($limit != 0) {
+                        $questions = $category->questions->load(['options', 'point', 'level'])->take($limit);
+                    }
+                }
+            }
+
+            if ($questions) {
+                return $this->response('Questions retrieved successfully', 'success', 200, $questions);
+            }
+
+            return $this->response('Questions could not be retrieved', 'error', 404);
         }
 
-        return $this->response('Questions could not be retrieved', 'error', 404);
+        return $this->response('Category does not exist', 'error', 404);
     }
 
     /**
@@ -116,13 +147,39 @@ class ApiQuestion extends BaseAPIRequest
      */
      public function subCategoryQuestions($subCategoryID)
      {
-         $questions = SubCategory::find($subCategoryID)->questions;
- 
-         if ($questions) {
-             return $this->response('Questions retrieved successfully', 'success', 200, $questions);
+         $subCategory = SubCategory::find($subCategoryID);
+        
+         if ($subCategory) {
+            if ($this->request->offsetExists('order')
+            && strtolower($this->request->order) === 'random') {
+                $limit = $this->request->has('limit') ? intval($this->request->limit) : $this->limit;
+
+                if ($limit === 'all' || $limit === 0) {
+                    $questions = $subCategory->questions()
+                                             ->with(['options', 'point', 'level'])
+                                             ->inRandomOrder()
+                                             ->get();
+                } else {
+                    if ($limit !== 0) {
+                        $questions = $subCategory->questions()
+                                                 ->with(['options', 'point', 'level'])
+                                                 ->take($limit)
+                                                 ->inRandomOrder()
+                                                 ->get();
+                    }
+                }
+            } else {
+                $questions = $subCategory->questions->load(['options', 'point', 'level']);
+            }
+            
+            if ($questions) {
+                return $this->response('Questions retrieved successfully', 'success', 200, $questions);
+            }
+    
+            return $this->response('Questions could not be retrieved', 'error', 404);
          }
- 
-         return $this->response('Questions could not be retrieved', 'error', 404);
+
+         return $this->response('Subcategory does not exist', 'error', 404);
      }
 
     /**

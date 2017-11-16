@@ -7,128 +7,103 @@ use App\PlayerPoints;
 class APIPoint extends BaseAPIRequest
 {
     
-    public function index(){        
-      
-        $allplayerpoints = PlayerPoints::all();
-
-        if($allplayerpoints){
-            return response()->json([
-                'status'=>'success',
-                'code'=>200,
-                'message'=>'You are Points API Root',
-                'data'=> $allplayerpoints
-            ]);
-        }else{
-            return response()->json([
-                'status'=>'success',
-                'code'=>404,
-                'message'=>'No Player point found',
-                'data'=> null
-            ]);
-        }
-            
-       
-
-    }
-
-    public function point(Array $data){
-        $id = $data['id'];
-        $point = PlayerPoint::find($id);
-
-        if($point){
-
-            return response()->json([
-                'status'=>'success',
-                'code'=>200,
-                'message'=>'Player Point Found',
-                'data'=> $point
-            ]);
-
-        }else{
-
-            return response()->json([
-                'status'=>'error',
-                'code'=>404,
-                'message'=>'Player Point Not Found',
-                'data'=> null
-            ]);
-
+    /**
+     * Get all points
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $points = $this->getAllResource()->get();
+        
+        if ($points) {
+            return $this->response('Points retrieved successfully', 'success', 200, $points);
         }
 
+        return $this->response('Points could not be retrieved', 'error', 404);
     }
-
-    public static function UpdatePlayerPoint(Array $data){
-        
-                $player_id = $data['player_id'];
-                $points = $data['points'];
-        
-                $playerPoints = PlayerPoints::find($player_id);
-
-                if($playerPoints){
-                    $former = $playerPoints->points;
-                    $update = $former + $points;
-
-                    $addtoplayerpoint = $playerPoints->point = $update;
-
-                    if($addtoplayerpoint){
-                        
-                            return response()->json([
-                                'status'=>'success',
-                                'code'=>200,
-                                'message'=>'Player Point Updated',
-                                'data'=> $addtoplayerpoint
-                            ]);
-                
-                        }else{
-                            return response()->json([
-                                'status'=>'error',
-                                'code'=>500,
-                                'message'=>'Player Not Updated',
-                                'data'=> null
-                            ]);
-                        }
-                }else{
-                   
-                    $createPlayerPoint = PlayerPoints::create([
-                        'player_id'=>$player_id,
-                        'points'=>$points
-                    ]);
-                        
-                    if($createPlayerPoint){
-                        return response()->json([
-                            'status'=>'success',
-                            'code'=>200,
-                            'message'=>'Player Point Created',
-                            'data'=> $addtoplayerpoint
-                        ]);
-                    }else{
-                        return response()->json([
-                            'status'=>'error',
-                            'code'=>500,
-                            'message'=>'Player Not Created',
-                            'data'=> null
-                        ]);
-                    }
-                }
-
-               
-        
-            }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getResourceByID($resourceID)
+     * Retrieves player points
+     *
+     * @param APIPlayer $apiPlayer
+     * @param int $playerID
+     *
+     * @return Response
+     */ 
+    public function playerPoints(APIPlayer $apiPlayer, $playerID)
     {
-        //
+        $player = $apiPlayer->getResourceByID($playerID);
+
+        if ($player) {
+            return $this->response('Points retrieved successfully', 'success', 200, $player->point);
+        }
+
+        return $this->response('Player does not exist', 'error', 404);
     }
 
+    /**
+     * Updates a player's points
+     *
+     * @param APIPlayer $apiPlayer
+     * @param int $playerID
+     *
+     * @return Response
+     */
+    public function updatePlayerPoints(APIPlayer $apiPlayer, $playerID)
+    {
+        $player = $apiPlayer->getResourceByID($playerID);
+        
+        if ($player) {
+            $playerPoints = $player->point;
+
+            $playerPoints->total_points += $this->request->points;
+            $playerPoints->earaned_points += $this->request->points;
+            
+            if ($playerPoints->save()) {
+                return $this->response('Points updated successfully', 'success', 200, $playerPoints);
+            }
+
+            return $this->response('Something went wrong, points were not updated', 'error', 500);
+        }
+
+        return $this->response('Player does not exist', 'error', 404);
+    }
+
+    //TODO: cashPoint - Convert points to cash or airtime
+     
     /**
     * {@inheritdoc}
     */
     public function getAllResource()
     {
-        //
+        return Points::query();
+    }
+ 
+    /**
+    * {@inheritdoc}
+    */
+    public function getResourceByID($resourceID)
+    {
+        return Points::find($resourceID);
+    }
+
+    /**
+    * Get a point by its ID
+    *
+    * @param int $resourceID
+    *
+    * @return \Illuminate\Http\Response
+    */
+    public function findByID($resourceID)
+    {
+        $point = $this->getResourceByID($resourceID);
+
+        if ($point) {
+            return $this->response('Point retrieved successfully', 'success', 200, $v);
+        }
+
+        return $this->response('Point does not exist', 'error', 404);
     }
 
     /**
@@ -136,6 +111,14 @@ class APIPoint extends BaseAPIRequest
     */
     public function paginate()
     {
-        //
+        $this->itemsPerPage = $this->request->has('items_per_page') ? intval($this->request->items_per_page) : $this->itemsPerPage;
+
+        $points = $this->getAllResource()->paginate($this->itemsPerPage);
+
+        if ($points) {
+            return $this->response('Points retrieved successfully', 'success', 200, $points);
+        }
+
+        return $this->response('Points could not be retrieved', 'error', 404);
     }
 }

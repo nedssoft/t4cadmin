@@ -2,242 +2,185 @@
 
 namespace App\Api\v1;
 
-use Illuminate\Http\Request;
-use Response;
-
 use App\Levels;
 use App\PlayerLevel;
 
-class APILevel
+class APILevel extends BaseAPIRequest
 {
-    public static function index(){
-                
-        $all = Levels::all();
-
-        $options = app('request')->header('accept-charset') == 'utf-8' ? JSON_UNESCAPED_UNICODE : null;
-
-        if($all){             
-            return Response::json([
-                'status'=>'success',
-                'code'=>201,
-                'message'=>'All Levels',
-                'data'=> $all
-            ],200, JSON_UNESCAPED_UNICODE );
-
-        }else{
-            return response()->json([
-                'status'=>'error',
-                'code'=>404,
-                'message'=>'No levels',
-                'data'=> null
-            ]);
-        }        
-
-    }
-
-    public static function create(Array $data){       
-       
+    /**
+     * Get all levels
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $levels = $this->getAllResource()->get();
         
-        $name = $data['name'];
-        $icon = $data['icon'];
-        $description = $data['description'];
-
-        $level = Levels::create([
-            'name'=>$name,
-            'icon'=>$icon,
-            'description'=>$description
-        ]);
-
-        if($level){
-
-            return response()->json([
-                'status'=>'success',
-                'code'=>201,
-                'message'=>'Level was created',
-                'data'=> $levels
-            ]);
-
-        }else{
-
-            return response()->json([
-                'status'=>'error',
-                'code'=>504,
-                'message'=>'Something went wrong, level was not created',
-                'data'=> null
-            ]);
-
+        if ($levels) {
+            return $this->response('Levels retrieved successfully', 'success', 200, $levels);
         }
 
+        return $this->response('Levels could not be retrieved', 'error', 404);
     }
 
-    public static function update(Array $data){        
-         
-        $level = Levels::find($data['id']);
+    /**
+     * Get all players in a specified level
+     *
+     */
+    public function levelPlayers($levelID)
+    {
+        $level = $this->getResourceByID($levelID);
 
-        if($level){
-
-            $level->name = $data['name'];
-            $level->icon = $data['icon'];
-            $level->points = $data['description'];
+        if ($level) {
+            $players = $level->players->load('point', 'badges', 'profile');
             
-            if($level->save()){
-                
-                return response()->json([
-                    'status'=>'Success',
-                    'code'=>201,
-                    'message'=>'Level Updated',
-                    'data'=> null
-                ]);
-
-            }else{
-
-                return response()->json([
-                    'status'=>'error',
-                    'code'=>500,
-                    'message'=>'Level not updated, something went wrong',
-                    'data'=> null
-                ]);
-
-            }            
-
-        }else{
-
-            return response()->json([
-                'status'=>'error',
-                'code'=>504,
-                'message'=>'Level Not Found',
-                'data'=> null
-            ]);
-
-        }
-
-    }
-
-    public static function level(Array $data){
-
-        $level = Levels::find($data['id']);
-
-        if($level){
-
-            return response()->json([
-                'status'=>'success',
-                'code'=>200,
-                'message'=>'Level Found',
-                'data'=> null
-            ]);
-
-        }else{
-
-            return response()->json([
-                'status'=>'error',
-                'code'=>404,
-                'message'=>'Level Not Found',
-                'data'=> null
-            ]);
-
-        }
-
-    }
-
-    public static function delete(Array $data){
-
-        $level = Levels::find($data['id']);
-
-        if($level){
-
-            if($level->delete()){
-
-                return response()->json([
-                    'status'=>'success',
-                    'code'=>200,
-                    'message'=>'Level Deleted',
-                    'data'=> $level
-                ]);
-
-            }else{
-
-                return response()->json([
-                    'status'=>'error',
-                    'code'=>500,
-                    'message'=>'Something went wrong, level was not deleted',
-                    'data'=> $level
-                ]);
-
+            if ($players) {
+                return $this->response('Players retrieved successfully', 'success', 200, $players);
             }
 
-        }else{
-
-            return response()->json([
-                'status'=>'error',
-                'code'=>404,
-                'message'=>'Level Not Found',
-                'data'=> null
-            ]);
-
-        }
-    }
-
-    public static function createPlayerLevel(Array $data){
-
-        $player_id = $data['player_id'];
-        $level_id = $data['level_id'];
-
-        $createPlayerLevel = PlayerLevel::create([
-            'player_id'=>$player_id,
-            'level_id'=>$level_id
-        ]);
-
-        if($createPlayerLevel){
-
-            return response()->json([
-                'status'=>'success',
-                'code'=>200,
-                'message'=>'Player Level Created',
-                'data'=> $createPlayerLevel
-            ]);
-
-        }else{
-            return response()->json([
-                'status'=>'error',
-                'code'=>500,
-                'message'=>'Player Level Not Created',
-                'data'=> null
-            ]);
+            return $this->response('Players could not be retrieved', 'error', 404);
         }
 
+        return $this->response('Level does not exist', 'error', 404);
     }
 
-    public static function updatePlayerLevel(Array $data){
+    /**
+	 * Gets the collection of player's levels
+     *
+     * @param APIPlayer $apiPlayer
+     * @param int $playerID
+     *
+	 * @return Response
+     */
+    public function levels(APIPlayer $apiPlayer, $playerID)
+    {
+        $player = $apiPlayer->getResourceByID($playerID);
         
-                $player_id = $data['player_id'];
-                $level_id = $data['level_id'];
+        if ($player) {
+            $levels = $player->levels;
+            
+            if ($levels) {
+                return $this->response('Player levels retrieved successfully', 'success', 200, $levels);
+            }
+    
+            return $this->response('Levels could not be retrieved', 'error', 404);
+        }
+
+        return $this->response('Player does not exist', 'error', 404);
+    }
+
+    /**
+	 * Adds a new level to a player's level achievement
+     *
+     * @param APIPlayer $apiPlayer
+     * @param int $playerID
+     * @param int $levelID
+     *
+	 * @return Response
+     */
+    public function createPlayerLevel(APIPlayer $apiPlayer, $playerID, $levelID)
+    {
+        $player = $apiPlayer->getResourceByID($playerID);
         
-                $findPlayerLevel = PlayerLevel::find($player_id);
+        if ($player) {
+            $level = $this->getResourceByID($levelID);
 
-                if($findPlayerLevel){
-                    $findPlayerLevel->level_id = $level_id;
-
-                    $updatePlayerLevel = $findPlayerLevel->save();
-
-                    if($updatePlayerLevel){
-
-                        return response()->json([
-                            'status'=>'success',
-                            'code'=>200,
-                            'message'=>'Player Level Updated',
-                            'data'=> $updatePlayerLevel
-                        ]);
-
-                    }else{
-                        return response()->json([
-                            'status'=>'error',
-                            'code'=>500,
-                            'message'=>'Player Level Not Updated',
-                            'data'=> null
-                        ]);
-                    }
+            if ($level) {
+                if (! $player->hasLevel($levelID)) {
+                    $player->levels()->attach($badgeID);
+                    
+                    return $this->response('Player level created', 'success', 201, $level);
                 }
-        
+
+                return $this->response('Player level already exists', 'error', 409);
             }
 
+            return $this->response('Level does not exist', 'error', 404);
+        }
+
+        return $this->response('Player does not exist', 'error', 404);
+    }
+
+    /**
+	 * Remove level from a player's level achievements
+     *
+     * @param APIPlayer $apiPlayer
+     * @param int $playerID
+     * @param int $levelID
+     *
+	 * @return Response
+     */
+    public function removePlayerLevel(APIPlayer $apiPlayer, $playerID, $badgeID)
+    {
+        $player = $apiPlayer->getResourceByID($playerID);
+
+        if ($player) {
+        $level = $this->getResourceByID($levelID);
+            
+            if ($level) {
+                //Check if the player already has this level
+                if ($player->hasLevel($levelID)) {
+                    $player->levels()->detach($levelID);
+    
+                    return $this->response('Player level removed', 'success', 200, $level);
+                }
+    
+                return $this->response('Player level does not exist', 'error', 404);
+            }
+            
+            return $this->response('Level does not exist', 'error', 404);
+        }
+
+        return $this->response('Player does not exist', 'error', 404);
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllResource()
+    {
+        return Levels::query();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResourceByID($resourceID)
+    {
+        return Levels::find($resourceID);
+    }
+
+    /**
+     * Get a level by its ID
+     *
+     * @param int $resourceID
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function findByID($resourceID)
+    {
+        $level = $this->getResourceByID($resourceID);
+
+        if ($level) {
+            return $this->response('Level retrieved successfully', 'success', 200, $level);
+        }
+
+        return $this->response('Level does not exist', 'error', 404);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate()
+    {
+        $this->itemsPerPage = $this->request->has('items_per_page') ? intval($this->request->items_per_page) : $this->itemsPerPage;
+
+        $levels = $this->getAllResource()->paginate($this->itemsPerPage);
+
+        if ($levels) {
+            return $this->response('Levels retrieved successfully', 'success', 200, $levels);
+        }
+
+        return $this->response('Levels could not be retrieved', 'error', 404);
+    }
 }

@@ -50,6 +50,18 @@ class Players extends Authenticatable
     {
         return $this->belongsToMany('App\Levels', 'player_levels', 'player_id', 'level_id');
     }
+
+    /**
+     * Check if the player has a given level
+     *
+     * @param int $levelID 
+     *
+     * @return bool
+     */
+    public function hasLevel($levelID)
+    {
+        return $this->levels->contains('id', $levelID);
+    }
     
     //get player points and money
 

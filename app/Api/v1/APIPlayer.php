@@ -84,7 +84,7 @@ class APIPlayer extends BaseAPIRequest
             //Commit
             DB::commit();
 
-            return $this->response('Player created', 'success', 201, $player->toArray());
+            return $this->response('Player created successfully', 'success', 201, $player->toArray());
         }
 
         //Rollback transaction
@@ -94,82 +94,24 @@ class APIPlayer extends BaseAPIRequest
     }
 
     /**
-	 * Adds a new badge to a player's badge collection
+	 * Gets the player's points
      *
-     * @param APIBadge $apiBadge
-     * @param int $badgeID
-     *
-	 * @return Response
-     */
-    public function createPlayerBadge(APIBadge $apiBadge, $playerID, $badgeID)
-    {
-        $player = $this->getResourceByID($playerID);
-
-        if ($player) {
-            $badge = $apiBadge->getResourceByID($badgeID);
-            
-            if ($badge) {
-                //Check if the player already has this badge
-                if (! $this->request->user()->hasBadge($badgeID)) {
-                    $this->request->user()->badges()->attach($badgeID);
-    
-                    return $this->response('Player badge created', 'success', 201, $badge);
-                }
-    
-                return $this->response('Player badge already exists', 'error', 409);
-            }
-    
-            return $this->response('Badge does not exist', 'error', 404);
-        }
-
-        return $this->response('Player does not exist', 'error', 404);
-    }
-
-    /**
-	 * Remove a badge player's badge collection
-     *
-     * @param APIBadge $apiBadge
-     * @param int $badgeID
+     * @param int $playerID
      *
 	 * @return Response
      */
-    public function removePlayerBadge(APIBadge $apiBadge, $badgeID)
-    {
-        $badge = $apiBadge->getResourceByID($badgeID);
-
-        if ($badge) {
-            //Check if the player already has this badge
-            if ($this->request->user()->hasBadge($badgeID)) {
-                $this->request->user()->badges()->detach($badgeID);
-
-                return $this->response('Player badge removed', 'success', 200, $badge);
-            }
-
-            return $this->response('Player badge does not exist', 'error', 404);
-        }
-        
-        return $this->response('Badge does not exist', 'error', 404);
-    }
-
-    /**
-	 * Gets the collection of player's badges
-     *
-     * @param Request $request
-     *
-	 * @return Response
-     */
-    public function badges($playerID)
+    public function points($playerID)
     {
         $player = $this->getResourceByID($playerID);
         
         if ($player) {
-            $badges = $this->request->user()->badges;
+            $point = $player->point;
             
-            if ($badges) {
-                return $this->response('Player badges retrieved successfully', 'success', 200, $badges);
+            if ($point) {
+                return $this->response('Player point retrieved successfully', 'success', 200, $point);
             }
     
-            return $this->response('Badge does not exist', 'error', 404);
+            return $this->response('Point does not exist', 'error', 404);
         }
 
         return $this->response('Player does not exist', 'error', 404);
@@ -190,7 +132,7 @@ class APIPlayer extends BaseAPIRequest
             return $this->response('Player retrieved successfully', 'success', 200, $player->load('profile'));
         }
 
-        return $this->response('Player could not be retrieved', 'error', 404);
+        return $this->response('Player does not exist', 'error', 404);
     }
 
     /**
@@ -210,7 +152,7 @@ class APIPlayer extends BaseAPIRequest
             }
         }
 
-        return $this->response('Player could not be retrieved', 'error', 404);
+        return $this->response('Player does not exist', 'error', 404);
     }
 
     /**
@@ -233,7 +175,7 @@ class APIPlayer extends BaseAPIRequest
             }
         }
 
-        return $this->response('Player not found', 'error', 404);
+        return $this->response('Player does not exist', 'error', 404);
     }
 
     /**

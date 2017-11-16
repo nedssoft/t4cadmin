@@ -3,6 +3,7 @@
 namespace App\Api\v1;
 
 use App\Category;
+use App\SubCategory;
 
 class ApiCategory extends BaseAPIRequest
 {
@@ -50,10 +51,10 @@ class ApiCategory extends BaseAPIRequest
         $category = $this->getResourceByID($resourceID);
 
         if ($category) {
-            return $this->response('Category retrieved successfully', 'success', 200, $category);
+            return $this->response('Category retrieved successfully', 'success', 200, $category->load('subCategories'));
         }
 
-        return $this->response('Category could not be retrieved', 'error', 404);
+        return $this->response('Category does not exist', 'error', 404);
     }
 
     /**
@@ -65,14 +66,38 @@ class ApiCategory extends BaseAPIRequest
      */
     public function subCategories($resourceID)
     {
-        $subCategories = $this->getResourceByID($resourceID)->subCategories;
+        $category = $this->getResourceByID($resourceID);
         
-        if ($subCategories) {
-            return $this->response('Subcategories retrieved successfully', 'success', 200, $subCategories);
-        }
+        if ($category) {
+            $subCategories = $category->subCategories;
 
-        return $this->response('Subcategories could not be retrieved', 'error', 404);
+            if ($subCategories) {
+                return $this->response('Subcategories retrieved successfully', 'success', 200, $subCategories);
+            }
+    
+            return $this->response('Subcategories could not be retrieved', 'error', 404);
+        }
+    
+        return $this->response('Category does not exist', 'error', 404);
     }
+
+    /**
+     * Get a subcategory by ID
+     *
+     * @param int $resourceID
+     *
+     * @return \Illuminate\Http\Response
+     */
+     public function subCategory($resourceID)
+     {
+         $subCategory = SubCategory::find($resourceID);
+         
+         if ($subCategory) {
+            return $this->response('Subcategory retrieved successfully', 'success', 200, $subCategory->load('category'));
+         }
+     
+         return $this->response('Subcategory does not exist', 'error', 404);
+     }
 
     /**
      * {@inheritdoc}
